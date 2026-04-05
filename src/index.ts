@@ -256,6 +256,12 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   };
 
   await channel.setTyping?.(chatJid, true);
+  // Refresh typing indicator every 4s — WhatsApp auto-clears it after ~5s
+  const typingRefresh = setInterval(() => {
+    channel
+      .setTyping?.(chatJid, true)
+      ?.catch(() => {});
+  }, 4000);
   let hadError = false;
   let outputSentToUser = false;
 
@@ -286,6 +292,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
     }
   });
 
+  clearInterval(typingRefresh);
   await channel.setTyping?.(chatJid, false);
   if (idleTimer) clearTimeout(idleTimer);
 
@@ -299,6 +306,15 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
       );
       return true;
     }
+    // Notify the user so they're never left in silence
+    await channel
+      .sendMessage(
+        chatJid,
+        "Sorry, I ran into an error and couldn't complete your request. Please try again.",
+      )
+      .catch((err) =>
+        logger.warn({ err }, 'Failed to send error message to user'),
+      );
     // Roll back cursor so retries can re-process these messages
     lastAgentTimestamp[chatJid] = previousCursor;
     saveState();
