@@ -10,18 +10,14 @@ import {
   makeCacheableSignalKeyStore,
   normalizeMessageContent,
   useMultiFileAuthState,
+  proto,
 } from '@whiskeysockets/baileys';
 import type {
   GroupMetadata,
+  WAMessageContent,
   WAMessageKey,
   WASocket,
-  proto as ProtoTypes,
 } from '@whiskeysockets/baileys';
-// proto is not statically analyzable as a named ESM export from this CJS module
-import { createRequire } from 'module';
-const { proto } = createRequire(import.meta.url)('@whiskeysockets/baileys') as {
-  proto: typeof ProtoTypes;
-};
 
 import {
   ASSISTANT_HAS_OWN_NUMBER,
@@ -65,7 +61,13 @@ export class WhatsAppChannel implements Channel {
   private flushing = false;
   private groupSyncTimerStarted = false;
   /** Cache of recently sent messages for retry requests (max 256 entries). */
-  private sentMessageCache = new Map<string, ProtoTypes.IMessage>();
+  private sentMessageCache = new Map<string, WAMessageContent>();
+  /**
+   * For dedicated-number bots: maps registered group JID → actual DM sender JID.
+   * Incoming DMs from unregistered JIDs are routed to the main group; this map
+   * records the true recipient so outbound replies reach the right person.
+   */
+  private dmSenderMap = new Map<string, string>();
   /** Short-lived cache of phone-normalized group metadata for outbound sends. */
   private groupMetadataCache = new Map<
     string,
@@ -232,13 +234,6 @@ export class WhatsAppChannel implements Channel {
 
     this.sock.ev.on('creds.update', saveCreds);
 
-    this.sock.ev.on('chats.phoneNumberShare', ({ lid, jid }) => {
-      const lidUser = lid?.split('@')[0].split(':')[0];
-      if (lidUser && jid) {
-        this.setLidPhoneMapping(lidUser, jid);
-      }
-    });
-
     this.sock.ev.on('messages.upsert', async ({ messages }) => {
       for (const msg of messages) {
         try {
@@ -327,6 +322,47 @@ export class WhatsAppChannel implements Channel {
               is_from_me: fromMe,
               is_bot_message: isBotMessage,
             });
+          } else if (
+            ASSISTANT_HAS_OWN_NUMBER &&
+            !chatJid.endsWith('@g.us') &&
+            !msg.key.fromMe
+          ) {
+            // Dedicated-number bot: route any unregistered DM to the main group.
+            // Incoming DMs arrive with remoteJid = sender's JID, not the bot's own JID,
+            // so registered group JID (bot's own number) never matches directly.
+            const mainEntry = Object.entries(groups).find(
+              ([jid, g]) => g.isMain && !jid.endsWith('@g.us'),
+            );
+            if (mainEntry) {
+              const [mainJid] = mainEntry;
+              this.dmSenderMap.set(mainJid, chatJid);
+
+              let content =
+                normalized.conversation ||
+                normalized.extendedTextMessage?.text ||
+                normalized.imageMessage?.caption ||
+                normalized.videoMessage?.caption ||
+                '';
+              if (!content) continue;
+
+              const sender = msg.key.participant || msg.key.remoteJid || '';
+              const senderName = msg.pushName || sender.split('@')[0];
+
+              logger.info(
+                { from: chatJid, routedTo: mainJid },
+                'Routing unregistered DM to main group',
+              );
+              this.opts.onMessage(mainJid, {
+                id: msg.key.id || '',
+                chat_jid: mainJid,
+                sender,
+                sender_name: senderName,
+                content,
+                timestamp,
+                is_from_me: false,
+                is_bot_message: false,
+              });
+            }
           } else if (chatJid !== rawJid) {
             // LID translation produced a JID that doesn't match any registered group
             logger.warn(
@@ -357,6 +393,9 @@ export class WhatsAppChannel implements Channel {
       ? text
       : `${ASSISTANT_NAME}: ${text}`;
 
+    // For dedicated-number DM catch-all: redirect to actual sender's JID.
+    const actualJid = this.dmSenderMap.get(jid) ?? jid;
+
     if (!this.connected) {
       this.outgoingQueue.push({ jid, text: prefixed });
       logger.info(
@@ -366,7 +405,7 @@ export class WhatsAppChannel implements Channel {
       return;
     }
     try {
-      const sent = await this.sock.sendMessage(jid, { text: prefixed });
+      const sent = await this.sock.sendMessage(actualJid, { text: prefixed });
       // Cache for retry requests (recipient may ask us to re-encrypt)
       if (sent?.key?.id && sent.message) {
         this.sentMessageCache.set(sent.key.id, sent.message);
@@ -402,8 +441,9 @@ export class WhatsAppChannel implements Channel {
   async setTyping(jid: string, isTyping: boolean): Promise<void> {
     try {
       const status = isTyping ? 'composing' : 'paused';
-      logger.debug({ jid, status }, 'Sending presence update');
-      await this.sock.sendPresenceUpdate(status, jid);
+      const actualJid = this.dmSenderMap.get(jid) ?? jid;
+      logger.debug({ jid, actualJid, status }, 'Sending presence update');
+      await this.sock.sendPresenceUpdate(status, actualJid);
     } catch (err) {
       logger.debug({ jid, err }, 'Failed to update typing status');
     }
