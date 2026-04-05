@@ -9,10 +9,17 @@
  *             API key via /api/oauth/claude_cli/create_api_key.
  *             Proxy injects real OAuth token on that exchange request;
  *             subsequent requests carry the temp key which is valid as-is.
+ *
+ * Credentials are re-read from .env (and ~/.claude/.credentials.json as
+ * fallback) every 60 seconds so token refreshes take effect automatically
+ * without a service restart.
  */
 import { createServer, Server } from 'http';
 import { request as httpsRequest } from 'https';
 import { request as httpRequest, RequestOptions } from 'http';
+import { readFileSync } from 'fs';
+import { homedir } from 'os';
+import { join } from 'path';
 
 import { readEnvFile } from './env.js';
 import { logger } from './logger.js';
@@ -23,26 +30,71 @@ export interface ProxyConfig {
   authMode: AuthMode;
 }
 
+/** Read the OAuth token from ~/.claude/.credentials.json if available. */
+function readClaudeCredentials(): string | undefined {
+  try {
+    const path = join(homedir(), '.claude', '.credentials.json');
+    const data = JSON.parse(readFileSync(path, 'utf8'));
+    return data?.claudeAiOauth?.accessToken || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+interface CachedSecrets {
+  apiKey: string | undefined;
+  oauthToken: string | undefined;
+  baseUrl: string;
+  cachedAt: number;
+}
+
+/** Re-read credentials with a 60-second cache. */
+function makeSecretsReader(): () => CachedSecrets {
+  let cache: CachedSecrets | null = null;
+
+  return () => {
+    const now = Date.now();
+    if (cache && now - cache.cachedAt < 60_000) return cache;
+
+    const secrets = readEnvFile([
+      'ANTHROPIC_API_KEY',
+      'CLAUDE_CODE_OAUTH_TOKEN',
+      'ANTHROPIC_AUTH_TOKEN',
+      'ANTHROPIC_BASE_URL',
+    ]);
+
+    const oauthToken =
+      secrets.CLAUDE_CODE_OAUTH_TOKEN ||
+      secrets.ANTHROPIC_AUTH_TOKEN ||
+      readClaudeCredentials();
+
+    cache = {
+      apiKey: secrets.ANTHROPIC_API_KEY,
+      oauthToken,
+      baseUrl: secrets.ANTHROPIC_BASE_URL || 'https://api.anthropic.com',
+      cachedAt: now,
+    };
+    return cache;
+  };
+}
+
 export function startCredentialProxy(
   port: number,
   host = '127.0.0.1',
 ): Promise<Server> {
-  const secrets = readEnvFile([
+  // Read once at startup to determine auth mode and upstream URL
+  const initial = readEnvFile([
     'ANTHROPIC_API_KEY',
-    'CLAUDE_CODE_OAUTH_TOKEN',
-    'ANTHROPIC_AUTH_TOKEN',
     'ANTHROPIC_BASE_URL',
   ]);
 
-  const authMode: AuthMode = secrets.ANTHROPIC_API_KEY ? 'api-key' : 'oauth';
-  const oauthToken =
-    secrets.CLAUDE_CODE_OAUTH_TOKEN || secrets.ANTHROPIC_AUTH_TOKEN;
-
+  const authMode: AuthMode = initial.ANTHROPIC_API_KEY ? 'api-key' : 'oauth';
   const upstreamUrl = new URL(
-    secrets.ANTHROPIC_BASE_URL || 'https://api.anthropic.com',
+    initial.ANTHROPIC_BASE_URL || 'https://api.anthropic.com',
   );
   const isHttps = upstreamUrl.protocol === 'https:';
   const makeRequest = isHttps ? httpsRequest : httpRequest;
+  const getSecrets = makeSecretsReader();
 
   return new Promise((resolve, reject) => {
     const server = createServer((req, res) => {
@@ -62,10 +114,12 @@ export function startCredentialProxy(
         delete headers['keep-alive'];
         delete headers['transfer-encoding'];
 
+        const secrets = getSecrets();
+
         if (authMode === 'api-key') {
           // API key mode: inject x-api-key on every request
           delete headers['x-api-key'];
-          headers['x-api-key'] = secrets.ANTHROPIC_API_KEY;
+          headers['x-api-key'] = secrets.apiKey;
         } else {
           // OAuth mode: replace placeholder Bearer token with the real one
           // only when the container actually sends an Authorization header
@@ -73,8 +127,8 @@ export function startCredentialProxy(
           // x-api-key only, so they pass through without token injection.
           if (headers['authorization']) {
             delete headers['authorization'];
-            if (oauthToken) {
-              headers['authorization'] = `Bearer ${oauthToken}`;
+            if (secrets.oauthToken) {
+              headers['authorization'] = `Bearer ${secrets.oauthToken}`;
             }
           }
         }
