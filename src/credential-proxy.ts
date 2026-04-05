@@ -83,10 +83,7 @@ export function startCredentialProxy(
   host = '127.0.0.1',
 ): Promise<Server> {
   // Read once at startup to determine auth mode and upstream URL
-  const initial = readEnvFile([
-    'ANTHROPIC_API_KEY',
-    'ANTHROPIC_BASE_URL',
-  ]);
+  const initial = readEnvFile(['ANTHROPIC_API_KEY', 'ANTHROPIC_BASE_URL']);
 
   const authMode: AuthMode = initial.ANTHROPIC_API_KEY ? 'api-key' : 'oauth';
   const upstreamUrl = new URL(
@@ -176,4 +173,17 @@ export function startCredentialProxy(
 export function detectAuthMode(): AuthMode {
   const secrets = readEnvFile(['ANTHROPIC_API_KEY']);
   return secrets.ANTHROPIC_API_KEY ? 'api-key' : 'oauth';
+}
+
+/**
+ * Get the current OAuth token for container injection.
+ * Prefers .env, falls back to ~/.claude/.credentials.json.
+ */
+export function getOAuthToken(): string | undefined {
+  const secrets = readEnvFile(['CLAUDE_CODE_OAUTH_TOKEN', 'ANTHROPIC_AUTH_TOKEN']);
+  return (
+    secrets.CLAUDE_CODE_OAUTH_TOKEN ||
+    secrets.ANTHROPIC_AUTH_TOKEN ||
+    readClaudeCredentials()
+  );
 }

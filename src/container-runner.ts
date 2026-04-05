@@ -25,7 +25,7 @@ import {
   readonlyMountArgs,
   stopContainer,
 } from './container-runtime.js';
-import { detectAuthMode } from './credential-proxy.js';
+import { detectAuthMode, getOAuthToken } from './credential-proxy.js';
 import { validateAdditionalMounts } from './mount-security.js';
 import { RegisteredGroup } from './types.js';
 
@@ -240,21 +240,22 @@ function buildContainerArgs(
   // Pass host timezone so container's local time matches the user's
   args.push('-e', `TZ=${TIMEZONE}`);
 
-  // Route API traffic through the credential proxy (containers never see real secrets)
-  args.push(
-    '-e',
-    `ANTHROPIC_BASE_URL=http://${CONTAINER_HOST_GATEWAY}:${CREDENTIAL_PROXY_PORT}`,
-  );
-
-  // Mirror the host's auth method with a placeholder value.
-  // API key mode: SDK sends x-api-key, proxy replaces with real key.
-  // OAuth mode:   SDK exchanges placeholder token for temp API key,
-  //               proxy injects real OAuth token on that exchange request.
   const authMode = detectAuthMode();
   if (authMode === 'api-key') {
+    // Route API key through the credential proxy so containers never see real secrets.
+    args.push(
+      '-e',
+      `ANTHROPIC_BASE_URL=http://${CONTAINER_HOST_GATEWAY}:${CREDENTIAL_PROXY_PORT}`,
+    );
     args.push('-e', 'ANTHROPIC_API_KEY=placeholder');
   } else {
-    args.push('-e', 'CLAUDE_CODE_OAUTH_TOKEN=placeholder');
+    // OAuth mode: pass the real token directly. The token has user:inference scope
+    // which allows Claude Code to authenticate without needing org:create_api_key
+    // for the exchange endpoint. Token is read fresh on each container launch.
+    const oauthToken = getOAuthToken();
+    if (oauthToken) {
+      args.push('-e', `CLAUDE_CODE_OAUTH_TOKEN=${oauthToken}`);
+    }
   }
 
   // Runtime-specific args for host gateway resolution
