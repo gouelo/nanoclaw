@@ -289,7 +289,11 @@ export class WhatsAppChannel implements Channel {
                 const buffer = await downloadMediaMessage(msg, 'buffer', {});
                 const groupDir = path.join(GROUPS_DIR, groups[chatJid].folder);
                 const caption = normalized?.imageMessage?.caption ?? '';
-                const result = await processImage(buffer as Buffer, groupDir, caption);
+                const result = await processImage(
+                  buffer as Buffer,
+                  groupDir,
+                  caption,
+                );
                 if (result) {
                   content = result.content;
                 }
@@ -344,7 +348,7 @@ export class WhatsAppChannel implements Channel {
               ([jid, g]) => g.isMain && !jid.endsWith('@g.us'),
             );
             if (mainEntry) {
-              const [mainJid] = mainEntry;
+              const [mainJid, mainGroup] = mainEntry;
               this.dmSenderMap.set(mainJid, chatJid);
 
               let content =
@@ -353,6 +357,26 @@ export class WhatsAppChannel implements Channel {
                 normalized.imageMessage?.caption ||
                 normalized.videoMessage?.caption ||
                 '';
+
+              // Image attachment handling for routed DMs
+              if (isImageMessage(msg)) {
+                try {
+                  const buffer = await downloadMediaMessage(msg, 'buffer', {});
+                  const groupDir = path.join(GROUPS_DIR, mainGroup.folder);
+                  const caption = normalized?.imageMessage?.caption ?? '';
+                  const result = await processImage(
+                    buffer as Buffer,
+                    groupDir,
+                    caption,
+                  );
+                  if (result) {
+                    content = result.content;
+                  }
+                } catch (err) {
+                  logger.warn({ err, jid: chatJid }, 'Image - download failed (DM route)');
+                }
+              }
+
               if (!content) continue;
 
               const sender = msg.key.participant || msg.key.remoteJid || '';
