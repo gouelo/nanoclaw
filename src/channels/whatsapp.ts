@@ -373,7 +373,10 @@ export class WhatsAppChannel implements Channel {
                     content = result.content;
                   }
                 } catch (err) {
-                  logger.warn({ err, jid: chatJid }, 'Image - download failed (DM route)');
+                  logger.warn(
+                    { err, jid: chatJid },
+                    'Image - download failed (DM route)',
+                  );
                 }
               }
 
