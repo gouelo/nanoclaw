@@ -180,7 +180,10 @@ export function detectAuthMode(): AuthMode {
  * Prefers .env, falls back to ~/.claude/.credentials.json.
  */
 export function getOAuthToken(): string | undefined {
-  const secrets = readEnvFile(['CLAUDE_CODE_OAUTH_TOKEN', 'ANTHROPIC_AUTH_TOKEN']);
+  const secrets = readEnvFile([
+    'CLAUDE_CODE_OAUTH_TOKEN',
+    'ANTHROPIC_AUTH_TOKEN',
+  ]);
   return (
     secrets.CLAUDE_CODE_OAUTH_TOKEN ||
     secrets.ANTHROPIC_AUTH_TOKEN ||

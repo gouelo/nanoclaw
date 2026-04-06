@@ -22,7 +22,6 @@ import {
   useMultiFileAuthState,
 } from '@whiskeysockets/baileys';
 
-
 const AUTH_DIR = './store/auth';
 const QR_FILE = './store/qr-data.txt';
 const STATUS_FILE = './store/auth-status.txt';

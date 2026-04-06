@@ -258,9 +258,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   await channel.setTyping?.(chatJid, true);
   // Refresh typing indicator every 4s — WhatsApp auto-clears it after ~5s
   const typingRefresh = setInterval(() => {
-    channel
-      .setTyping?.(chatJid, true)
-      ?.catch(() => {});
+    channel.setTyping?.(chatJid, true)?.catch(() => {});
   }, 4000);
   let hadError = false;
   let outputSentToUser = false;
@@ -403,7 +401,7 @@ async function runAgent(
       const isStaleSession =
         sessionId &&
         output.error &&
-        /no conversation found|ENOENT.*\.jsonl|session.*not found/i.test(
+        /no conversation found|ENOENT.*\.jsonl|session.*not found|authentication_error|Invalid.*credentials|bearer token/i.test(
           output.error,
         );
 
