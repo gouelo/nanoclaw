@@ -258,10 +258,18 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   };
 
   await channel.setTyping?.(chatJid, true);
-  // Refresh typing indicator every 4s — WhatsApp auto-clears it after ~5s
-  const typingRefresh = setInterval(() => {
+  // Refresh typing indicator every 4s — WhatsApp auto-clears it after ~5s.
+  // Stopped as soon as the agent sends a response so it doesn't linger.
+  let typingRefresh: ReturnType<typeof setInterval> | null = setInterval(() => {
     channel.setTyping?.(chatJid, true)?.catch(() => {});
   }, 4000);
+  const stopTyping = () => {
+    if (typingRefresh) {
+      clearInterval(typingRefresh);
+      typingRefresh = null;
+    }
+    channel.setTyping?.(chatJid, false)?.catch(() => {});
+  };
   let hadError = false;
   let outputSentToUser = false;
 
@@ -289,6 +297,9 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
       }
 
       if (result.status === 'success') {
+        // Stop typing as soon as the agent finishes — don't keep it on while
+        // the container sits idle waiting for the next piped message.
+        stopTyping();
         queue.notifyIdle(chatJid);
       }
 
@@ -298,8 +309,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
     },
   );
 
-  clearInterval(typingRefresh);
-  await channel.setTyping?.(chatJid, false);
+  stopTyping();
   if (idleTimer) clearTimeout(idleTimer);
 
   if (output === 'error' || hadError) {
