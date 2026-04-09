@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לימוד יומי יואל</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a1a;
+            --card-bg: linear-gradient(135deg, rgba(15,15,40,0.97) 0%, rgba(10,10,25,0.99) 100%);
+            --text-primary: #fffde7;
+            --text-secondary: rgba(255,255,255,0.65);
+            --text-muted: rgba(255,255,255,0.3);
+            --gold: #f4c430;
+            --gold-dim: rgba(244,196,48,0.7);
+            --gold-faint: rgba(244,196,48,0.1);
+            --gold-faintest: rgba(244,196,48,0.04);
+            --border: rgba(244,196,48,0.3);
+            --border-light: rgba(244,196,48,0.15);
+            --border-xlight: rgba(244,196,48,0.12);
+            --nav-bg: rgba(8,8,20,0.95);
+            --nav-border: rgba(244,196,48,0.2);
+            --section-bg: rgba(255,255,255,0.03);
+            --section-border: rgba(244,196,48,0.15);
+            --track-bg: linear-gradient(135deg, rgba(15,15,40,0.97) 0%, rgba(10,10,25,0.99) 100%);
+            --track-border: rgba(244,196,48,0.25);
+            --track-border-hover: rgba(244,196,48,0.45);
+            --track-glow-hover: rgba(244,196,48,0.08);
+            --text-panel-bg: rgba(255,255,255,0.03);
+            --text-panel-border: rgba(244,196,48,0.12);
+            --progress-bg: rgba(255,255,255,0.08);
+            --nav-btn-color: rgba(244,196,48,0.55);
+            --nav-btn-hover: rgba(244,196,48,0.85);
+            --nav-sep: rgba(244,196,48,0.2);
+            --hero-eyebrow: rgba(244,196,48,0.6);
+            --hero-sub: rgba(244,196,48,0.55);
+            --scroll-hint: rgba(244,196,48,0.4);
+            --spinner-bg: rgba(244,196,48,0.2);
+            --card-glow: rgba(244,196,48,0.1);
+            --card-shadow: 0 0 60px rgba(244,196,48,0.1), 0 30px 60px rgba(0,0,0,0.5);
+            --card-top-line: rgba(244,196,48,0.6);
+            --track-top-line: rgba(244,196,48,0.5);
+        }
+        body.light {
+            --bg: #f5f0e8;
+            --card-bg: linear-gradient(135deg, #fffef9 0%, #fdf8f0 100%);
+            --text-primary: #2c1810;
+            --text-secondary: rgba(44,24,16,0.65);
+            --text-muted: rgba(44,24,16,0.35);
+            --gold: #b8860b;
+            --gold-dim: rgba(139,90,43,0.7);
+            --gold-faint: rgba(139,90,43,0.08);
+            --gold-faintest: rgba(139,90,43,0.04);
+            --border: rgba(139,90,43,0.25);
+            --border-light: rgba(139,90,43,0.15);
+            --border-xlight: rgba(139,90,43,0.12);
+            --nav-bg: rgba(255,250,240,0.97);
+            --nav-border: rgba(139,90,43,0.15);
+            --section-bg: rgba(139,90,43,0.04);
+            --section-border: rgba(139,90,43,0.12);
+            --track-bg: linear-gradient(135deg, #fffef9 0%, #fdf8f0 100%);
+            --track-border: rgba(139,90,43,0.2);
+            --track-border-hover: rgba(139,90,43,0.4);
+            --track-glow-hover: rgba(139,90,43,0.06);
+            --text-panel-bg: rgba(139,90,43,0.04);
+            --text-panel-border: rgba(139,90,43,0.12);
+            --progress-bg: rgba(44,24,16,0.08);
+            --nav-btn-color: rgba(92,61,46,0.7);
+            --nav-btn-hover: rgba(92,61,46,0.95);
+            --nav-sep: rgba(139,90,43,0.2);
+            --hero-eyebrow: rgba(92,61,46,0.7);
+            --hero-sub: rgba(92,61,46,0.6);
+            --scroll-hint: rgba(92,61,46,0.45);
+            --spinner-bg: rgba(139,90,43,0.15);
+            --card-glow: rgba(139,90,43,0.08);
+            --card-shadow: 0 0 40px rgba(139,90,43,0.08), 0 20px 40px rgba(0,0,0,0.08);
+            --card-top-line: rgba(139,90,43,0.4);
+            --track-top-line: rgba(139,90,43,0.35);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            font-family: 'Frank Ruhl Libre', serif;
+            display: block;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .stars { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; transition: opacity 0.3s ease; }
+        body.light .stars { opacity: 0.08; }
+        .star { position:absolute; background:white; border-radius:50%; animation:twinkle var(--dur,3s) ease-in-out infinite; animation-delay:var(--delay,0s); opacity:0; }
+        @keyframes twinkle { 0%,100%{opacity:0;transform:scale(0.8)} 50%{opacity:var(--max-opacity,0.8);transform:scale(1.2)} }
+        .particles { position:fixed; top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0; transition: opacity 0.3s ease; }
+        body.light .particles { opacity: 0; pointer-events: none; }
+        .particle { position:absolute; width:3px;height:3px;background:var(--gold);border-radius:50%; animation:float var(--dur,8s) ease-in-out infinite; animation-delay:var(--delay,0s); opacity:0; bottom:-10px; left:var(--left,50%); }
+        @keyframes float { 0%{opacity:0;transform:translateY(0) scale(1)} 10%{opacity:0.8} 90%{opacity:0.4} 100%{opacity:0;transform:translateY(-100vh) scale(0.3) rotate(360deg)} }
+        .moon { position:fixed;top:60px;left:80px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffde7,#f4c430,#e6a800);box-shadow:0 0 40px 15px rgba(244,196,48,0.3),0 0 80px 30px rgba(244,196,48,0.1);animation:moonGlow 4s ease-in-out infinite;z-index:1;transition:opacity 0.3s ease; }
+        body.light .moon { opacity: 0; pointer-events: none; }
+        @keyframes moonGlow { 0%,100%{box-shadow:0 0 40px 15px rgba(244,196,48,0.3),0 0 80px 30px rgba(244,196,48,0.1)} 50%{box-shadow:0 0 60px 25px rgba(244,196,48,0.5),0 0 100px 50px rgba(244,196,48,0.2)} }
+
+        .container { position:relative;z-index:10;width:100%;max-width:700px;padding:20px;margin:0 auto;padding-bottom:60px; }
+
+        /* ── Hero / Parallax ── */
+        .hero { height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden; }
+        .para-layer { position:absolute;top:0;left:0;width:100%;height:130%;pointer-events:none;will-change:transform; }
+        .hero-content { text-align:center;z-index:10;position:relative;padding:20px;will-change:transform,opacity; }
+        .hero-eyebrow { font-size:13px;letter-spacing:6px;color:var(--hero-eyebrow);text-transform:uppercase;margin-bottom:20px;animation:hFadeDown 1s ease both;transition:color 0.3s ease; }
+        .hero-big { font-size:clamp(64px,15vw,140px);font-weight:900;line-height:0.95;background:linear-gradient(180deg,#fffde7 0%,#f4c430 55%,#c8860a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:hAppear 1.2s ease both 0.15s;filter:drop-shadow(0 0 50px rgba(244,196,48,0.35)); }
+        body.light .hero-big { background:linear-gradient(180deg,#5c3d2e 0%,#b8860b 55%,#8b5a2b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+        .hero-line { width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);margin:22px auto;transition:background 0.3s ease; }
+        .hero-sub { font-size:clamp(13px,2.5vw,17px);color:var(--hero-sub);letter-spacing:5px;animation:hFadeDown 1s ease both 0.4s;transition:color 0.3s ease; }
+        @keyframes hAppear { from{opacity:0;transform:scale(0.88) translateY(-24px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        @keyframes hFadeDown { from{opacity:0;transform:translateY(-14px)} to{opacity:1;transform:translateY(0)} }
+        .scroll-hint { position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--scroll-hint);font-size:11px;letter-spacing:3px;text-transform:uppercase;animation:shBounce 2.5s ease-in-out infinite;transition:color 0.3s ease; }
+        .scroll-hint-arrow { width:16px;height:16px;border-right:2px solid var(--scroll-hint);border-bottom:2px solid var(--scroll-hint);transform:rotate(45deg);transition:border-color 0.3s ease; }
+        @keyframes shBounce { 0%,100%{transform:translateX(-50%) translateY(0);opacity:0.4} 50%{transform:translateX(-50%) translateY(10px);opacity:0.85} }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 44px 38px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            animation: cardFloat 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--card-top-line),transparent); }
+        @keyframes cardFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+        .header-title { font-size:13px;letter-spacing:4px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:8px;transition:color 0.3s ease; }
+        .sefirah-badge { display:inline-block;background:var(--gold-faint);border:1px solid var(--border);border-radius:20px;padding:6px 18px;font-size:14px;color:var(--gold);margin-bottom:28px;letter-spacing:1px;transition:all 0.3s ease; }
+        .day-number { font-size:clamp(90px,20vw,140px);font-weight:900;line-height:1;background:linear-gradient(180deg,#fffde7 0%,#f4c430 50%,#c8860a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;animation:numPulse 4s ease-in-out infinite;display:block; }
+        body.light .day-number { background:linear-gradient(180deg,#5c3d2e 0%,#b8860b 50%,#8b5a2b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+        @keyframes numPulse { 0%,100%{filter:drop-shadow(0 0 20px rgba(244,196,48,0.4))} 50%{filter:drop-shadow(0 0 40px rgba(244,196,48,0.8))} }
+        .omer-text { font-size:clamp(18px,4vw,24px);font-weight:500;color:var(--text-primary);line-height:1.8;margin-bottom:8px;transition:color 0.3s ease; }
+        .weeks-part { font-size:0.82em;color:var(--gold-dim);transition:color 0.3s ease; }
+
+        .divider { width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:26px auto;transition:background 0.3s ease; }
+
+        /* Blessing section */
+        .bracha-section {
+            background: var(--section-bg);
+            border: 1px solid var(--section-border);
+            border-radius: 16px;
+            padding: 22px 20px;
+            margin-bottom: 16px;
+            text-align: center;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .section-label { font-size:11px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:14px;text-transform:uppercase;transition:color 0.3s ease; }
+        .bracha-text { font-size:clamp(16px,3.5vw,20px);color:var(--text-primary);line-height:2;direction:rtl;transition:color 0.3s ease; }
+        .bracha-highlight { color:var(--gold);font-weight:700;transition:color 0.3s ease; }
+
+        /* Harachaman */
+        .harachaman-section {
+            background: var(--gold-faintest);
+            border: 1px solid var(--border-xlight);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .harachaman-text { font-size:clamp(15px,3vw,18px);color:var(--text-secondary);line-height:2;direction:rtl;transition:color 0.3s ease; }
+
+        /* Torah section */
+        .torah-section {
+            background: var(--gold-faint);
+            border-radius: 16px;
+            padding: 24px 20px;
+            border: 1px solid var(--section-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .torah-period-title { font-size:clamp(17px,3.5vw,21px);font-weight:700;color:var(--gold);margin-bottom:14px;direction:rtl;line-height:1.4;transition:color 0.3s ease; }
+        .torah-quote { font-size:clamp(16px,3.2vw,20px);font-weight:500;color:var(--text-primary);line-height:1.85;margin-bottom:8px;direction:rtl;transition:color 0.3s ease; }
+        .torah-quote::before { content:'"';color:var(--gold);font-size:1.3em;font-weight:900; }
+        .torah-quote::after { content:'"';color:var(--gold);font-size:1.3em;font-weight:900; }
+        .torah-source { font-size:13px;color:var(--gold-dim);font-style:italic;margin-bottom:16px;transition:color 0.3s ease; }
+        .torah-body { direction:rtl;border-top:1px solid var(--border-xlight);padding-top:14px;transition:border-color 0.3s ease; }
+        .torah-body p { font-size:clamp(14px,2.8vw,16px);color:var(--text-secondary);line-height:2.05;margin-bottom:14px;transition:color 0.3s ease; }
+        .torah-body p:last-child { margin-bottom:0; }
+        .torah-body p.em { color:var(--gold-dim);transition:color 0.3s ease; }
+
+        .date-display { margin-top:26px;font-size:13px;color:var(--text-muted);letter-spacing:1px;transition:color 0.3s ease; }
+        .message-card { font-size:clamp(22px,5vw,32px);color:var(--text-primary);line-height:1.6;transition:color 0.3s ease; }
+        .message-sub { font-size:16px;color:var(--gold-dim);margin-top:12px;transition:color 0.3s ease; }
+
+        @media(max-width:480px){ .card{padding:30px 18px;} .moon{width:50px;height:50px;top:30px;left:30px;} }
+
+        /* ── Top Navigation Bar ── */
+        .top-nav {
+            position: fixed; top: 0; right: 0; left: 0; z-index: 1000;
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--nav-border);
+            backdrop-filter: blur(12px);
+            display: flex; align-items: center; justify-content: center;
+            height: 54px; gap: 0;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .nav-btn {
+            background: none; border: none; cursor: pointer;
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 15px; font-weight: 500;
+            color: var(--nav-btn-color);
+            padding: 0 28px; height: 100%;
+            border-bottom: 2px solid transparent;
+            transition: color 0.25s, border-color 0.25s;
+            letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 7px;
+        }
+        .nav-btn:hover { color: var(--nav-btn-hover); }
+        .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+        .nav-sep { width: 1px; height: 22px; background: var(--nav-sep); transition: background 0.3s ease; }
+
+        /* ── Theme Toggle Button ── */
+        .theme-toggle {
+            position: absolute; left: 16px;
+            background: none; border: 1px solid var(--border);
+            border-radius: 20px; padding: 5px 12px;
+            cursor: pointer; font-size: 16px;
+            color: var(--gold); transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 5px;
+            line-height: 1;
+        }
+        .theme-toggle:hover { background: var(--gold-faint); border-color: var(--gold); }
+
+        /* ── Learning View ── */
+        #learningView { position: relative; z-index: 10; padding-top: 70px; }
+        #omerView { display: none; padding-top: 54px; }
+
+        /* ── Subtle geometric background ── */
+        body::after {
+            content: '';
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpolygon points='60,18 70,38 92,38 75,51 82,72 60,59 38,72 45,51 28,38 50,38' fill='none' stroke='rgba(244%2C196%2C48%2C0.025)' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 120px 120px;
+            pointer-events: none; z-index: 0;
+        }
+        body.light::after {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpolygon points='60,18 70,38 92,38 75,51 82,72 60,59 38,72 45,51 28,38 50,38' fill='none' stroke='rgba(139%2C90%2C43%2C0.03)' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        /* ── Learning hero parallax ── */
+        .learn-hero {
+            height: 65vh; min-height: 360px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .lh-layer { position:absolute;top:0;left:0;width:100%;height:130%;pointer-events:none;will-change:transform; }
+        .lh-content { text-align:center;z-index:10;position:relative;padding:20px;will-change:transform,opacity; }
+        .lh-eyebrow { font-size:12px;letter-spacing:7px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:18px;animation:hFadeDown 0.9s ease both; }
+        .lh-title { font-size:clamp(36px,9vw,80px);font-weight:900;line-height:1.1;background:linear-gradient(180deg,#fffde7 0%,#f4c430 55%,#c8860a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:hAppear 1.1s ease both 0.15s;filter:drop-shadow(0 0 30px rgba(244,196,48,0.35)); }
+        body.light .lh-title { background:linear-gradient(180deg,#5c3d2e 0%,#b8860b 55%,#8b5a2b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+        .lh-line { width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(244,196,48,0.6),transparent);margin:18px auto; }
+        .lh-sub { font-size:clamp(12px,2vw,15px);color:var(--gold-dim);letter-spacing:6px;animation:hFadeDown 1s ease both 0.4s; }
+        .lh-scroll-hint { position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(244,196,48,0.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;animation:shBounce 2.5s ease-in-out infinite; }
+
+        /* ── Track card letter watermark (very subtle) ── */
+        .track-watermark {
+            position: absolute; bottom: 14px; left: 18px;
+            font-size: 88px; font-weight: 900; line-height: 1;
+            color: var(--gold); opacity: 0.035;
+            pointer-events: none; user-select: none;
+            font-family: 'Frank Ruhl Libre', serif;
+            transition: opacity 0.4s;
+        }
+        .track-card:hover .track-watermark { opacity: 0.065; }
+
+        .learning-header {
+            text-align: center; padding: 36px 20px 28px;
+        }
+        .learning-title {
+            font-size: clamp(28px, 6vw, 42px); font-weight: 900;
+            background: linear-gradient(180deg, #fffde7 0%, #f4c430 60%, #c8860a 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        body.light .learning-title {
+            background: linear-gradient(180deg, #5c3d2e 0%, #b8860b 60%, #8b5a2b 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .learning-subtitle {
+            font-size: 13px; letter-spacing: 4px; color: var(--gold-dim);
+            text-transform: uppercase; transition: color 0.3s ease;
+        }
+
+        .tracks-container {
+            max-width: 680px; margin: 0 auto; padding: 0 16px 60px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* ── Track Card ── */
+        .track-card {
+            background: var(--track-bg);
+            border: 1px solid var(--track-border);
+            border-radius: 20px;
+            padding: 26px 24px 22px;
+            position: relative; overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s ease;
+        }
+        .track-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--track-top-line), transparent);
+        }
+        .track-card:hover {
+            border-color: var(--track-border-hover);
+            box-shadow: 0 0 40px var(--track-glow-hover);
+        }
+
+        .track-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+        .track-info { flex: 1; }
+        .track-icon { font-size: 24px; margin-bottom: 4px; }
+        .track-title { font-size: 18px; font-weight: 700; color: var(--gold); margin-bottom: 3px; transition: color 0.3s ease; }
+        .track-subtitle { font-size: 13px; color: var(--text-secondary); line-height: 1.5; transition: color 0.3s ease; }
+        .track-current { font-size: 14px; color: var(--gold-dim); font-weight: 500; margin-top: 4px; transition: color 0.3s ease; }
+
+        /* Progress bar */
+        .progress-wrap { margin-bottom: 16px; }
+        .progress-label { font-size: 11px; letter-spacing: 2px; color: var(--gold-dim); margin-bottom: 6px; text-transform: uppercase; transition: color 0.3s ease; }
+        .progress-bar-bg {
+            height: 4px; background: var(--progress-bg); border-radius: 2px; overflow: hidden; transition: background 0.3s ease;
+        }
+        .progress-bar-fill {
+            height: 100%; background: linear-gradient(90deg, #c8860a, #f4c430);
+            border-radius: 2px; transition: width 0.5s ease;
+        }
+
+        /* Buttons row */
+        .track-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(244,196,48,0.18), rgba(200,134,10,0.25));
+            border: 1px solid rgba(244,196,48,0.4);
+            color: #f4c430; font-family: 'Frank Ruhl Libre', serif;
+            font-size: 14px; font-weight: 600;
+            padding: 10px 20px; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s; letter-spacing: 0.3px;
+        }
+        .btn-primary:hover { background: rgba(244,196,48,0.28); border-color: rgba(244,196,48,0.7); }
+        .btn-done {
+            background: linear-gradient(135deg, rgba(72,210,100,0.15), rgba(40,160,70,0.2));
+            border: 1px solid rgba(72,210,100,0.35);
+            color: #6be08a; font-family: 'Frank Ruhl Libre', serif;
+            font-size: 14px; font-weight: 600;
+            padding: 10px 20px; border-radius: 12px; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-done:hover { background: rgba(72,210,100,0.25); border-color: rgba(72,210,100,0.6); }
+        .btn-done.completed {
+            background: rgba(72,210,100,0.1); opacity: 0.6; cursor: default;
+        }
+        .btn-back {
+            background: none; border: none; cursor: pointer;
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 12px; color: rgba(244,196,48,0.4);
+            padding: 4px 0; text-decoration: underline;
+            text-underline-offset: 3px; transition: color 0.2s;
+        }
+        .btn-back:hover { color: rgba(244,196,48,0.7); }
+
+        /* Text panel */
+        .text-panel {
+            display: none;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(244,196,48,0.12);
+            border-radius: 14px;
+            padding: 20px 18px;
+            margin-top: 14px;
+            direction: rtl; text-align: right;
+        }
+        .text-panel.open { display: block; }
+        .text-panel-title {
+            font-size: 13px; letter-spacing: 2px; color: rgba(244,196,48,0.5);
+            text-transform: uppercase; margin-bottom: 12px;
+        }
+        .text-panel-toggle {
+            display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+        }
+        .btn-toggle {
+            background: rgba(244,196,48,0.08); border: 1px solid rgba(244,196,48,0.2);
+            color: rgba(244,196,48,0.6); font-family: 'Frank Ruhl Libre', serif;
+            font-size: 12px; padding: 5px 14px; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-toggle.active { background: rgba(244,196,48,0.2); color: #f4c430; border-color: rgba(244,196,48,0.5); }
+        .text-content {
+            font-size: var(--text-content-size, 18px);
+            color: rgba(255,255,255,0.88);
+            line-height: 2.1; direction: rtl;
+        }
+        .text-content .verse { display: block; margin-bottom: 6px; }
+        .text-content .verse-num { color: rgba(244,196,48,0.5); font-size: 0.75em; margin-left: 6px; }
+
+        /* Spinner */
+        .spinner {
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px; gap: 10px; color: rgba(244,196,48,0.5);
+            font-size: 14px;
+        }
+        .spinner-ring {
+            width: 22px; height: 22px; border: 2px solid rgba(244,196,48,0.2);
+            border-top-color: #f4c430; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-msg { color: rgba(255,100,100,0.8); font-size: 14px; padding: 10px 0; text-align: center; }
+
+        /* Targum toggle */
+        .targum-text { color: rgba(255,255,255,0.55); font-style: italic; font-size: 0.92em; line-height: 1.9; margin-top: 8px; direction: rtl; }
+
+        @media(max-width:480px){
+            .track-card { padding: 20px 16px 18px; }
+            .btn-primary, .btn-done { font-size: 13px; padding: 9px 15px; }
+            .nav-btn { font-size: 14px; padding: 0 18px; }
+        }
+
+        /* ── Desktop Layout ── */
+        @media(min-width: 900px){
+            .container { max-width: 860px; padding: 32px; }
+            .tracks-container {
+                max-width: 880px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                padding: 0 24px 80px;
+            }
+            .card { padding: 56px 52px; }
+            .learning-header { padding: 44px 24px 36px; }
+            .learning-title { font-size: 48px; }
+            .track-card { padding: 32px 28px 26px; }
+            .track-title { font-size: 20px; }
+            .track-subtitle { font-size: 14px; }
+            .torah-body p { font-size: 17px; }
+            .nav-btn { font-size: 16px; padding: 0 32px; }
+            .top-nav { height: 60px; }
+            #omerView { padding-top: 60px; }
+            #learningView { padding-top: 76px; }
+        }
+
+        @media(min-width: 1280px){
+            .container { max-width: 1000px; }
+            .tracks-container { max-width: 1040px; gap: 28px; }
+            .card { padding: 64px 64px; }
+        }
+
+        /* ── Light mode overrides for learning section ── */
+        body.light .btn-done {
+            background: linear-gradient(135deg, rgba(40,160,70,0.12), rgba(20,120,50,0.18));
+            border-color: rgba(40,160,70,0.5);
+            color: #1a7a3a;
+        }
+        body.light .btn-done:hover { background: rgba(40,160,70,0.22); border-color: rgba(40,160,70,0.7); }
+        body.light .text-content { color: rgba(44,24,16,0.88); }
+        body.light .text-content .verse-num { color: rgba(139,90,43,0.55); }
+        body.light .text-panel {
+            background: rgba(139,90,43,0.04);
+            border-color: rgba(139,90,43,0.15);
+        }
+        body.light .text-panel-title { color: rgba(92,61,46,0.55); }
+        body.light .btn-primary {
+            background: linear-gradient(135deg, rgba(139,90,43,0.1), rgba(184,134,11,0.15));
+            border-color: rgba(139,90,43,0.4);
+            color: #7a4f2a;
+        }
+        body.light .btn-primary:hover { background: rgba(139,90,43,0.18); border-color: rgba(139,90,43,0.6); }
+        body.light .btn-back { color: rgba(92,61,46,0.45); }
+        body.light .btn-back:hover { color: rgba(92,61,46,0.75); }
+        body.light .btn-toggle {
+            background: rgba(139,90,43,0.07);
+            border-color: rgba(139,90,43,0.2);
+            color: rgba(92,61,46,0.65);
+        }
+        body.light .btn-toggle.active {
+            background: rgba(139,90,43,0.18);
+            color: #7a4f2a;
+            border-color: rgba(139,90,43,0.45);
+        }
+        body.light .targum-text { color: rgba(44,24,16,0.6); }
+        body.light .spinner { color: rgba(139,90,43,0.6); }
+        body.light .spinner-ring {
+            border-color: rgba(139,90,43,0.2);
+            border-top-color: #b8860b;
+        }
+        body.light .error-msg { color: rgba(180,40,40,0.8); }
+        body.light .progress-bar-fill { background: linear-gradient(90deg, #8b5a2b, #b8860b); }
+
+        /* ── Aramaic Word of the Day ── */
+        .aramaic-card {
+            background: var(--track-bg);
+            border: 1px solid var(--track-border);
+            border-radius: 20px;
+            padding: 30px 28px 26px;
+            text-align: center;
+            position: relative; overflow: hidden;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .aramaic-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--track-top-line), transparent);
+        }
+        .aramaic-badge {
+            display: inline-block;
+            font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gold-dim); margin-bottom: 20px;
+            border: 1px solid var(--border);
+            border-radius: 20px; padding: 5px 16px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .aramaic-word {
+            font-size: clamp(44px, 10vw, 72px);
+            font-weight: 900; color: var(--gold);
+            line-height: 1.1; margin-bottom: 6px;
+            filter: drop-shadow(0 0 20px rgba(244,196,48,0.25));
+            transition: color 0.3s;
+        }
+        .aramaic-transliteration {
+            font-size: 15px; color: var(--text-secondary);
+            letter-spacing: 1px; margin-bottom: 18px;
+            font-style: italic; transition: color 0.3s;
+        }
+        .aramaic-divider {
+            width: 40px; height: 1px; margin: 0 auto 18px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+        }
+        .aramaic-meaning {
+            font-size: clamp(18px, 4vw, 24px);
+            font-weight: 600; color: var(--text-primary);
+            margin-bottom: 10px; direction: rtl;
+            transition: color 0.3s;
+        }
+        .aramaic-example {
+            font-size: clamp(13px, 2.5vw, 15px);
+            color: var(--text-secondary); line-height: 1.9;
+            direction: rtl; margin-top: 14px;
+            border-top: 1px solid var(--section-border);
+            padding-top: 14px; transition: color 0.3s, border-color 0.3s;
+        }
+        .aramaic-example em { color: var(--gold); font-style: normal; font-weight: 600; }
+        .aramaic-day-count { font-size: 11px; color: var(--text-muted); margin-top: 14px; letter-spacing: 1px; }
+
+        /* ── TTS Controls ── */
+        .tts-controls {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 12px; flex-wrap: wrap;
+        }
+        .btn-tts {
+            background: linear-gradient(135deg, rgba(244,196,48,0.12), rgba(200,134,10,0.18));
+            border: 1px solid rgba(244,196,48,0.35);
+            color: #f4c430; font-family: 'Frank Ruhl Libre', serif;
+            font-size: 13px; font-weight: 600;
+            padding: 7px 16px; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .btn-tts:hover { background: rgba(244,196,48,0.22); border-color: rgba(244,196,48,0.6); }
+        .btn-tts:disabled { opacity: 0.55; cursor: default; }
+        .btn-tts-stop {
+            background: none;
+            border: 1px solid rgba(244,196,48,0.2);
+            color: rgba(244,196,48,0.55); font-family: 'Frank Ruhl Libre', serif;
+            font-size: 12px; padding: 7px 12px; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-tts-stop:hover { border-color: rgba(244,196,48,0.5); color: rgba(244,196,48,0.85); }
+        .tts-chunk-progress {
+            font-size: 11px; color: rgba(244,196,48,0.4); letter-spacing: 1px;
+        }
+        body.light .btn-tts {
+            background: linear-gradient(135deg, rgba(139,90,43,0.1), rgba(184,134,11,0.15));
+            border-color: rgba(139,90,43,0.35); color: #7a4f2a;
+        }
+        body.light .btn-tts:hover { background: rgba(139,90,43,0.2); }
+        body.light .btn-tts-stop { border-color: rgba(139,90,43,0.25); color: rgba(92,61,46,0.6); }
+
+        /* ── TTS Word Highlight ── */
+        .tts-word {
+            cursor: pointer;
+            border-radius: 3px;
+            padding: 1px 1px;
+            transition: background 0.15s;
+            display: inline;
+        }
+        .tts-word:hover { background: rgba(244,196,48,0.18); }
+        .tts-word.tts-active {
+            background: rgba(244,196,48,0.38);
+            color: #fff;
+            border-radius: 3px;
+        }
+        body.light .tts-word:hover { background: rgba(139,90,43,0.12); }
+        body.light .tts-word.tts-active {
+            background: rgba(184,134,11,0.3);
+            color: #2c1810;
+        }
+
+        /* ── Font size control ── */
+        .font-size-controls {
+            display: flex; align-items: center; gap: 6px;
+            margin-bottom: 12px; justify-content: flex-end;
+        }
+        .font-size-controls span {
+            font-size: 11px; letter-spacing: 2px;
+            color: var(--gold-dim); text-transform: uppercase;
+            margin-left: 4px; transition: color 0.3s;
+        }
+        .btn-font {
+            background: var(--gold-faint); border: 1px solid var(--border);
+            color: var(--gold); font-family: 'Frank Ruhl Libre', serif;
+            font-weight: 700; border-radius: 8px;
+            width: 30px; height: 30px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; font-size: 14px; line-height: 1;
+        }
+        .btn-font:hover { background: rgba(244,196,48,0.2); }
+    </style>
+</head>
+<body>
+<div class="moon"></div>
+<div class="stars" id="stars"></div>
+<div class="particles" id="particles"></div>
+
+<!-- Top Navigation -->
+<nav class="top-nav" id="topNav">
+    <button class="nav-btn" id="navOmer" onclick="switchView('omer')">
+        <span>🌙</span> ספירת העומר
+    </button>
+    <div class="nav-sep"></div>
+    <button class="nav-btn active" id="navLearn" onclick="switchView('learning')">
+        <span>📖</span> הלימוד שלי
+    </button>
+    <div style="flex:1"></div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="החלף מצב תצוגה">
+        <span id="themeIcon">☀️</span>
+    </button>
+</nav>
+
+<!-- ═══════════════════ LEARNING VIEW ═══════════════════ -->
+<div id="learningView">
+
+    <!-- Learning hero parallax -->
+    <section class="learn-hero" id="learnHero">
+        <div class="lh-layer" id="lhDeep"></div>
+        <div class="lh-layer" id="lhNear"></div>
+        <div class="lh-content" id="lhContent">
+            <div class="lh-eyebrow">לימוד יומי</div>
+            <div class="lh-title">הלימוד היומי<br>של יואל</div>
+            <div class="lh-line"></div>
+            <div class="lh-sub">תּוֹרָה &nbsp;·&nbsp; מִשְׁנָה &nbsp;·&nbsp; נָ״ךְ</div>
+        </div>
+        <div class="lh-scroll-hint">
+            <span>גלול</span>
+            <div class="scroll-hint-arrow"></div>
+        </div>
+    </section>
+
+    <div class="tracks-container">
+
+        <!-- Track 1: Parasha -->
+        <div class="track-card" id="parashaCard">
+            <div class="track-watermark">פ</div>
+            <div class="track-header">
+                <div class="track-info">
+                    <div class="track-icon">📜</div>
+                    <div class="track-title">פרשת השבוע</div>
+                    <div class="track-subtitle" id="parashaSubtitle">טוען...</div>
+                    <div class="track-current" id="parashaCurrentAliyah"></div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label" id="parashaProgressLabel">פרק 1 מתוך 3</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="parashaProgressBar" style="width:14%"></div></div>
+            </div>
+            <div class="track-actions">
+                <button class="btn-primary" onclick="toggleParashaText()">📖 המשך ללמוד</button>
+                <button class="btn-done" id="parashaDoneBtn" onclick="markParashaDone()">✓ סיימתי</button>
+                <button class="btn-back" onclick="goBackParasha()">← חזור לפרק הקודם</button>
+            </div>
+            <div class="text-panel" id="parashaTextPanel">
+                <div class="text-panel-title">הטקסט</div>
+                <div class="font-size-controls">
+                    <span>גודל טקסט</span>
+                    <button class="btn-font" onclick="changeFontSize(-1)" title="הקטן">−</button>
+                    <button class="btn-font" onclick="changeFontSize(1)" title="הגדל">+</button>
+                </div>
+                <div class="tts-controls">
+                    <button class="btn-tts" id="parashaTtsBtn" onclick="speakText('parashaTextContent', this)">🔊 הקרא</button>
+                    <button class="btn-tts-stop" id="parashaTtsStop" onclick="stopTTS()" style="display:none">⏹ עצור</button>
+                    <span class="tts-chunk-progress" id="parashaTtsProgress"></span>
+                </div>
+                <div class="text-panel-toggle" id="parashaToggleRow">
+                    <button class="btn-toggle active" id="btnHeb" onclick="showParashaMode('heb')">עברית</button>
+                    <button class="btn-toggle" id="btnTargum" onclick="showParashaMode('targum')">תרגום אונקלוס</button>
+                </div>
+                <div id="parashaTextContent"></div>
+                <div style="text-align:center; margin-top:18px;">
+                    <button class="btn-done" id="parashaDoneBtnBottom" onclick="markParashaDone()">✓ סיימתי</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Track 2: Mishna -->
+        <div class="track-card" id="mishnaCard">
+            <div class="track-watermark">מ</div>
+            <div class="track-header">
+                <div class="track-info">
+                    <div class="track-icon">📚</div>
+                    <div class="track-title">משנה יומית</div>
+                    <div class="track-subtitle" id="mishnaSubtitle">טוען...</div>
+                    <div class="track-current" id="mishtaCurrentPerek"></div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label" id="mishnaProgressLabel"></div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="mishnaProgressBar" style="width:0%"></div></div>
+            </div>
+            <div class="track-actions">
+                <button class="btn-primary" onclick="toggleMishnaText()">📖 המשך ללמוד</button>
+                <button class="btn-done" id="mishnaDoneBtn" onclick="markMishnaDone()">✓ סיימתי</button>
+                <button class="btn-back" onclick="goBackMishna()">← חזור לפרק הקודם</button>
+            </div>
+            <div class="text-panel" id="mishnaTextPanel">
+                <div class="font-size-controls">
+                    <span>גודל טקסט</span>
+                    <button class="btn-font" onclick="changeFontSize(-1)" title="הקטן">−</button>
+                    <button class="btn-font" onclick="changeFontSize(1)" title="הגדל">+</button>
+                </div>
+                <div class="tts-controls">
+                    <button class="btn-tts" id="mishnaTtsBtn" onclick="speakText('mishnaTextContent', this)">🔊 הקרא</button>
+                    <button class="btn-tts-stop" id="mishnaTtsStop" onclick="stopTTS()" style="display:none">⏹ עצור</button>
+                    <span class="tts-chunk-progress" id="mishnaTtsProgress"></span>
+                </div>
+                <div class="text-panel-title">הטקסט</div>
+                <div id="mishnaTextContent"></div>
+                <div style="text-align:center; margin-top:18px;">
+                    <button class="btn-done" id="mishnaDoneBtnBottom" onclick="markMishnaDone()">✓ סיימתי</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Track 3: Tanakh -->
+        <div class="track-card" id="tanakhCard">
+            <div class="track-watermark">נ</div>
+            <div class="track-header">
+                <div class="track-info">
+                    <div class="track-icon">✡️</div>
+                    <div class="track-title">נ״ך יומי</div>
+                    <div class="track-subtitle" id="tanakhSubtitle">טוען...</div>
+                    <div class="track-current" id="tanakhCurrentPerek"></div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label" id="tanakhProgressLabel"></div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="tanakhProgressBar" style="width:0%"></div></div>
+            </div>
+            <div class="track-actions">
+                <button class="btn-primary" onclick="toggleTanakhText()">📖 המשך ללמוד</button>
+                <button class="btn-done" id="tanakhDoneBtn" onclick="markTanakhDone()">✓ סיימתי</button>
+                <button class="btn-back" onclick="goBackTanakh()">← חזור לפרק הקודם</button>
+            </div>
+            <div class="text-panel" id="tanakhTextPanel">
+                <div class="font-size-controls">
+                    <span>גודל טקסט</span>
+                    <button class="btn-font" onclick="changeFontSize(-1)" title="הקטן">−</button>
+                    <button class="btn-font" onclick="changeFontSize(1)" title="הגדל">+</button>
+                </div>
+                <div class="tts-controls">
+                    <button class="btn-tts" id="tanakhTtsBtn" onclick="speakText('tanakhTextContent', this)">🔊 הקרא</button>
+                    <button class="btn-tts-stop" id="tanakhTtsStop" onclick="stopTTS()" style="display:none">⏹ עצור</button>
+                    <span class="tts-chunk-progress" id="tanakhTtsProgress"></span>
+                </div>
+                <div class="text-panel-title">הטקסט</div>
+                <div id="tanakhTextContent"></div>
+                <div style="text-align:center; margin-top:18px;">
+                    <button class="btn-done" id="tanakhDoneBtnBottom" onclick="markTanakhDone()">✓ סיימתי</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aramaic Word of the Day -->
+        <div class="aramaic-card" id="aramaicCard">
+            <div class="aramaic-badge">מילת היום בארמית</div>
+            <div class="aramaic-word" id="aramaicWord"></div>
+            <div class="aramaic-transliteration" id="aramaicTranslit"></div>
+            <div class="aramaic-divider"></div>
+            <div class="aramaic-meaning" id="aramaicMeaning"></div>
+            <div class="aramaic-example" id="aramaicExample"></div>
+            <div class="aramaic-day-count" id="aramaicDayCount"></div>
+        </div>
+
+    </div>
+</div>
+<!-- ═══════════════════ END LEARNING VIEW ═══════════════════ -->
+
+<div id="omerView">
+<!-- Hero parallax -->
+<section class="hero" id="hero">
+    <div class="para-layer" id="paraDeep"></div>
+    <div class="para-layer" id="paraNear"></div>
+    <div class="hero-content" id="heroContent">
+        <div class="hero-eyebrow">תשפ״ו · ספירת העומר</div>
+        <div class="hero-big">ספירת<br>העומר</div>
+        <div class="hero-line"></div>
+        <div class="hero-sub">מפסח ועד שבועות</div>
+    </div>
+    <div class="scroll-hint" id="scrollHint">
+        <span>גלול</span>
+        <div class="scroll-hint-arrow"></div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="card">
+        <div id="content"><p style="color:#f4c430;font-size:18px;">טוען...</p></div>
+    </div>
+</div>
+</div><!-- end #omerView -->
+<script>
+const OMER_START = new Date(2026, 3, 2); // April 2, 2026 = Day 1 (16 Nisan 5786)
+
+const hebrewNumbers = ['','אֶחָד','שְׁנַיִם','שְׁלשָׁה','אַרְבָּעָה','חֲמִשָּׁה','שִׁשָּׁה','שִׁבְעָה','שְׁמוֹנָה','תִּשְׁעָה','עֲשָׂרָה','אַחַד עָשָׂר','שְׁנֵים עָשָׂר','שְׁלשָׁה עָשָׂר','אַרְבָּעָה עָשָׂר','חֲמִשָּׁה עָשָׂר','שִׁשָּׁה עָשָׂר','שִׁבְעָה עָשָׂר','שְׁמוֹנָה עָשָׂר','תִּשְׁעָה עָשָׂר','עֶשְׂרִים','אֶחָד וְעֶשְׂרִים','שְׁנַיִם וְעֶשְׂרִים','שְׁלשָׁה וְעֶשְׂרִים','אַרְבָּעָה וְעֶשְׂרִים','חֲמִשָּׁה וְעֶשְׂרִים','שִׁשָּׁה וְעֶשְׂרִים','שִׁבְעָה וְעֶשְׂרִים','שְׁמוֹנָה וְעֶשְׂרִים','תִּשְׁעָה וְעֶשְׂרִים','שְׁלשִׁים','אֶחָד וּשְׁלשִׁים','שְׁנַיִם וּשְׁלשִׁים','שְׁלשָׁה וּשְׁלשִׁים','אַרְבָּעָה וּשְׁלשִׁים','חֲמִשָּׁה וּשְׁלשִׁים','שִׁשָּׁה וּשְׁלשִׁים','שִׁבְעָה וּשְׁלשִׁים','שְׁמוֹנָה וּשְׁלשִׁים','תִּשְׁעָה וּשְׁלשִׁים','אַרְבָּעִים','אֶחָד וְאַרְבָּעִים','שְׁנַיִם וְאַרְבָּעִים','שְׁלשָׁה וְאַרְבָּעִים','אַרְבָּעָה וְאַרְבָּעִים','חֲמִשָּׁה וְאַרְבָּעִים','שִׁשָּׁה וְאַרְבָּעִים','שִׁבְעָה וְאַרְבָּעִים','שְׁמוֹנָה וְאַרְבָּעִים','תִּשְׁעָה וְאַרְבָּעִים'];
+const weekNames = ['','שָׁבוּעַ אֶחָד','שְׁנֵי שָׁבוּעוֹת','שְׁלשָׁה שָׁבוּעוֹת','אַרְבָּעָה שָׁבוּעוֹת','חֲמִשָּׁה שָׁבוּעוֹת','שִׁשָּׁה שָׁבוּעוֹת','שִׁבְעָה שָׁבוּעוֹת'];
+const sefirot = ['','חֶסֶד שֶׁבְּחֶסֶד','גְּבוּרָה שֶׁבְּחֶסֶד','תִּפְאֶרֶת שֶׁבְּחֶסֶד','נֶצַח שֶׁבְּחֶסֶד','הוֹד שֶׁבְּחֶסֶד','יְסוֹד שֶׁבְּחֶסֶד','מַלְכוּת שֶׁבְּחֶסֶד','חֶסֶד שֶׁבִּגְבוּרָה','גְּבוּרָה שֶׁבִּגְבוּרָה','תִּפְאֶרֶת שֶׁבִּגְבוּרָה','נֶצַח שֶׁבִּגְבוּרָה','הוֹד שֶׁבִּגְבוּרָה','יְסוֹד שֶׁבִּגְבוּרָה','מַלְכוּת שֶׁבִּגְבוּרָה','חֶסֶד שֶׁבְּתִּפְאֶרֶת','גְּבוּרָה שֶׁבְּתִּפְאֶרֶת','תִּפְאֶרֶת שֶׁבְּתִּפְאֶרֶת','נֶצַח שֶׁבְּתִּפְאֶרֶת','הוֹד שֶׁבְּתִּפְאֶרֶת','יְסוֹד שֶׁבְּתִּפְאֶרֶת','מַלְכוּת שֶׁבְּתִּפְאֶרֶת','חֶסֶד שֶׁבְּנֶצַח','גְּבוּרָה שֶׁבְּנֶצַח','תִּפְאֶרֶת שֶׁבְּנֶצַח','נֶצַח שֶׁבְּנֶצַח','הוֹד שֶׁבְּנֶצַח','יְסוֹד שֶׁבְּנֶצַח','מַלְכוּת שֶׁבְּנֶצַח','חֶסֶד שֶׁבְּהוֹד','גְּבוּרָה שֶׁבְּהוֹד','תִּפְאֶרֶת שֶׁבְּהוֹד','נֶצַח שֶׁבְּהוֹד','הוֹד שֶׁבְּהוֹד','יְסוֹד שֶׁבְּהוֹד','מַלְכוּת שֶׁבְּהוֹד','חֶסֶד שֶׁבִּיסוֹד','גְּבוּרָה שֶׁבִּיסוֹד','תִּפְאֶרֶת שֶׁבִּיסוֹד','נֶצַח שֶׁבִּיסוֹד','הוֹד שֶׁבִּיסוֹד','יְסוֹד שֶׁבִּיסוֹד','מַלְכוּת שֶׁבִּיסוֹד','חֶסֶד שֶׁבְּמַלְכוּת','גְּבוּרָה שֶׁבְּמַלְכוּת','תִּפְאֶרֶת שֶׁבְּמַלְכוּת','נֶצַח שֶׁבְּמַלְכוּת','הוֹד שֶׁבְּמַלְכוּת','יְסוֹד שֶׁבְּמַלְכוּת','מַלְכוּת שֶׁבְּמַלְכוּת'];
+
+const torahThoughts = [
+null,
+// 1 - חסד שבחסד
+{ q:'עוֹלָם חֶסֶד יִבָּנֶה', s:'תהילים פט, ג', e:'דוד המלך מגלה לנו שהעולם כולו לא נברא על בסיס הדין הקפדני, אלא על בסיס האהבה והחסד. כשאדם עושה חסד עם הזולת — הוא שותף בבריאת העולם.' },
+// 2 - גבורה שבחסד
+{ q:'אֵיזוֹ הִיא אַהֲבָה שֶׁאֵינָהּ תְּלוּיָה בְּדָבָר? זוֹ אַהֲבַת דָּוִד וִיהוֹנָתָן', s:'פרקי אבות ה, טז', e:'אהבה אמיתית לא מחפשת תמורה — היא נותנת מבלי לחשב. יהונתן אהב את דוד יותר מכיסא המלכות שלו עצמו. זוהי האהבה שמחזיקה עולמות.' },
+// 3 - תפארת שבחסד
+{ q:'הֱוֵי מְקַבֵּל כָּל הָאָדָם בְּסֵבֶר פָּנִים יָפוֹת', s:'שמאי, פרקי אבות א, טו', e:'מדהים — שמאי שידוע בקפדנותו, הוא זה שמלמד אותנו לקבל כל אדם בפנים שמחות. יופי של מצוה אינו רק בפועל אלא גם באיך — בחיוך, בחמימות, בכבוד.' },
+// 4 - נצח שבחסד
+{ q:'כָּל מִי שֶׁיֵּשׁ בּוֹ שְׁלשָׁה דְבָרִים הַלָּלוּ הוּא מִתַּלְמִידָיו שֶׁל אַבְרָהָם אָבִינוּ: עַיִן טוֹבָה, וְרוּחַ נְמוּכָה, וְנֶפֶשׁ שְׁפָלָה', s:'פרקי אבות ה, יט', e:'אברהם אבינו היה גדול העולם — אך כל גדולתו הייתה בשלושה דברים פנימיים: לראות טוב באנשים, להיות ענוותן, ולהסתפק במועט. אלו הם סימני הבן האמיתי של אברהם.' },
+// 5 - הוד שבחסד
+{ q:'גְּמִילוּת חֲסָדִים שְׁקוּלָה כְּנֶגֶד כָּל הַמִּצְווֹת כֻּלָּן', s:'תלמוד ירושלמי, פאה א, א', e:'חז"ל מלמדים שכל המצוות ביחד שקולות כנגד גמילות חסדים. הסיבה: שאר מצוות בין אדם למקום — אבל חסד הוא גם בין אדם לחברו וגם בין אדם למקום. הוא הגשר השלם.' },
+// 6 - יסוד שבחסד
+{ q:'עַל שְׁלשָׁה דְבָרִים הָעוֹלָם עוֹמֵד: עַל הַתּוֹרָה וְעַל הָעֲבוֹדָה וְעַל גְּמִילוּת חֲסָדִים', s:'שמעון הצדיק, פרקי אבות א, ב', e:'שלושה עמודים — תורה, עבודה, וחסד. בלא אחד מהם העולם אינו יכול לעמוד. הם כמו שלוש רגלי כיסא: הסר אחת ממנה — הכל קורס.' },
+// 7 - מלכות שבחסד
+{ q:'כִּי טוֹב לְהוֹדוֹת לַה\' וּלְזַמֵּר לְשִׁמְךָ עֶלְיוֹן', s:'תהילים צב, ב', e:'מזמור השבת — ביום המנוחה, כשאדם עוצר מן המרוץ, הוא יכול לראות את הטוב שמסביבו. ההודיה אינה רק תגובה לטובה — היא עצמה מגלה את הטוב שקיים.' },
+// 8 - חסד שבגבורה
+{ q:'אֵיזֶהוּ גִבּוֹר? הַכּוֹבֵשׁ אֶת יִצְרוֹ', s:'בן זומא, פרקי אבות ד, א', e:'אנו מכבדים גיבורים צבאיים — אך החכמים מגלים שהגבורה האמיתית היא פנימית. הכובש את יצרו — גיבור יותר מכובש ערים. כי הקרב הקשה ביותר הוא זה המתנהל בלב האדם.' },
+// 9 - גבורה שבגבורה
+{ q:'לְעוֹלָם יִהְיֶה אָדָם רַךְ כַּקָּנֶה וְאַל יְהֵא קָשֶׁה כָּאֶרֶז', s:'תלמוד בבלי, תענית כ, ב', e:'הרוח מכופף את הקנה — אבל הוא אינו נשבר. הרוח שוברת את הארז הגאה — אבל הוא נופל. הגמישות הפנימית היא עוצמה עצומה. הרוך אינו חולשה; הוא הגבורה הבשלה.' },
+// 10 - תפארת שבגבורה
+{ q:'בִּמְקוֹם שֶׁבַּעֲלֵי תְשׁוּבָה עוֹמְדִין, אֵין צַדִּיקִים גְּמוּרִים יְכוֹלִין לַעֲמוֹד', s:'תלמוד בבלי, ברכות לד, ב', e:'מי שכשל ושב — עולה גבוה יותר ממי שלא כשל מעולם. מדוע? כי הוא הכיר את חולשתו, נלחם ביצרו, ובחר לשוב. זוהי התשובה — לא מחיקת העבר, אלא הפיכתו לכנפיים.' },
+// 11 - נצח שבגבורה
+{ q:'כָּל כָּבוֹד בַּת מֶלֶךְ פְּנִימָה', s:'תהילים מה, יד', e:'הפסוק מדבר על בת המלך — הנשמה. כבודה האמיתי אינו בחיצוניות, בבגדים או בתואר — אלא בעולמה הפנימי, בנשמתה, בטוהרה. מה שנמצא בפנים — זה שנצחי.' },
+// 12 - הוד שבגבורה
+{ q:'אֵיזֶהוּ עָשִׁיר? הַשָּׂמֵחַ בְּחֶלְקוֹ', s:'בן זומא, פרקי אבות ד, א', e:'בן זומא הופך את המושג עושר על פיו. עשיר אינו מי שיש לו הכי הרבה — אלא מי שרוצה את מה שיש לו. השמחה בחלקנו היא אמנות: לראות ברכה במה שניתן לנו.' },
+// 13 - יסוד שבגבורה
+{ q:'לְפוּם צַעֲרָא אַגְרָא', s:'פרקי אבות ה, כג', e:'ממשנה עמוקה: השכר הוא פרופורציונלי לטרחה ולמאמץ. לא רק בגן עדן — אלא בחיים עצמם. מה שקשה להשיג — יקר יותר. המאמץ הוא חלק מהמתנה.' },
+// 14 - מלכות שבגבורה
+{ q:'אֵין הַבַּיְשָׁן לָמֵד וְאֵין הַקַּפְּדָן מְלַמֵּד', s:'פרקי אבות ב, ה', e:'הלמידה דורשת אומץ — לשאול שאלות, להודות שאינך יודע. ההוראה דורשת סבלנות — לפגוש את התלמיד היכן שהוא נמצא. כך נבנות הממלכות של דעת.' },
+// 15 - חסד שבתפארת
+{ q:'כָּל יִשְׂרָאֵל עֲרֵבִים זֶה בָּזֶה', s:'תלמוד בבלי, שבועות לט, א', e:'ערבות — לשון ערב, לשון ערוב. כולנו קשורים זה בזה כחוטים שנארגו יחד. כשאחד נופל — כולם מרגישים. כשאחד עולה — כולם מתרוממים. זו האחריות ההדדית של עם ישראל.' },
+// 16 - גבורה שבתפארת
+{ q:'הֱוֵי מִתַּלְמִידָיו שֶׁל אַהֲרֹן, אוֹהֵב שָׁלוֹם וְרוֹדֵף שָׁלוֹם', s:'הלל, פרקי אבות א, יב', e:'הלל בוחר בדגם של אהרן — לא משה. אהרן לא הוריד תורה מהשמים, אבל הוא היה שלום. הוא היה זה שהלך בין אנשים ריבנים וחיבר ביניהם. לרדוף שלום — זו מלאכה אקטיבית, לא פסיבית.' },
+// 17 - תפארת שבתפארת
+{ q:'שְׁמַע יִשְׂרָאֵל ה\' אֱלֹהֵינוּ ה\' אֶחָד', s:'דברים ו, ד', e:'הפסוק הנשגב ביותר ביהדות. לא "שמע" — שמיעה פסיבית. אלא קבלת מלכות שמים מחדש בכל יום. האחדות האלוהית אינה רק עובדה תיאולוגית — היא גם הזמנה: שגם אנחנו נהיה אחד.' },
+// 18 - נצח שבתפארת
+{ q:'כָּל אֶחָד וְאֶחָד חַיָּב לוֹמַר: בִּשְׁבִילִי נִבְרָא הָעוֹלָם', s:'משנה סנהדרין ד, ה', e:'המשנה מחייבת כל אדם לדעת שהעולם כולו שווה כנגדו. זהו לא גאווה — זוהי אחריות. אם כל העולם נברא בשבילי, אין לי רשות לחיות חיי בינוניות. אני חייב לעשות משהו גדול.' },
+// 19 - הוד שבתפארת
+{ q:'אֲנִי לְדוֹדִי וְדוֹדִי לִי', s:'שיר השירים ו, ג', e:'ראשי התיבות של "אני לדודי ודודי לי" — אלול. חודש הרחמים. הפסוק מתאר יחסי אהבה הדדיים: לא רק אנחנו מחפשים את הקב"ה — הוא מחפש אותנו. זוהי ההזמנה לשוב.' },
+// 20 - יסוד שבתפארת
+{ q:'וְאָהַבְתָּ לְרֵעֲךָ כָּמוֹךָ — זֶה כְּלָל גָּדוֹל בַּתּוֹרָה', s:'רבי עקיבא, ספרא קדושים', e:'רבי עקיבא — שעצמו גדל מאפס ועלה לגדולה — בוחר בפסוק הזה ככלל הגדול בתורה. אהבת הרע אינה רגש — היא מעשה: לחשוב על האחר לפני שאתה פועל.' },
+// 21 - מלכות שבתפארת
+{ q:'רָאִיתִי בְּנֵי עֲלִיָּה וְהֵם מֻעָטִים', s:'רבי שמעון בר יוחאי, סוכה מה, ב', e:'רשב"י מגלה שגדולה אמיתית היא נחלתם של מעטים — לא כי הדרך סגורה, אלא כי מעטים בוחרים ללכת בה. ל"ג בעומר — יום הילולת רשב"י — הוא חגיגת האור שבתוך החושך.' },
+// 22 - חסד שבנצח
+{ q:'הֱוֵי דָן אֶת כָּל הָאָדָם לְכַף זְכוּת', s:'יהושע בן פרחיה, פרקי אבות א, ו', e:'לדון לכף זכות זו אמנות. זה אומר: לפני שאתה שופט — עצור. שאל את עצמך: האם ייתכן שיש פה הסבר אחר? חיים של דן לכף זכות הם חיים עם פחות כעס ויותר שלווה.' },
+// 23 - גבורה שבנצח
+{ q:'כָּל הַמְקַיֵּם נֶפֶשׁ אַחַת — מַעֲלֶה עָלָיו הַכָּתוּב כְּאִלּוּ קִיֵּם עוֹלָם מָלֵא', s:'משנה סנהדרין ד, ה', e:'ולהפך — המאבד נפש אחת כאילו איבד עולם מלא. כל אדם הוא עולם שלם. זוהי הסיבה שחיי אדם הם קדושים מכל — לא ניתן לשקלל אותם, לא ניתן לוותר עליהם.' },
+// 24 - תפארת שבנצח
+{ q:'אִם אֵין אֲנִי לִי — מִי לִי? וּכְשֶׁאֲנִי לְעַצְמִי — מָה אֲנִי? וְאִם לֹא עַכְשָׁיו — אֵימָתַי?', s:'הלל, פרקי אבות א, יד', e:'שלוש שאלות שמכילות את כל פילוסופיית החיים: אחריות לעצמך, אחריות לאחרים, ודחיפות. הלל שואל: אם לא עכשיו — אימתי? מחר הוא לא מובטח.' },
+// 25 - נצח שבנצח
+{ q:'יָגַעְתִּי וְלֹא מָצָאתִי — אַל תַּאֲמִין. לֹא יָגַעְתִּי וּמָצָאתִי — אַל תַּאֲמִין', s:'תלמוד בבלי, מגילה ו, ב', e:'עקרון ממלכותי בעולם הרוחני והגשמי כאחד: אין קיצורי דרך לדברים שראויים. יגיעה — היא המפתח. לא הכשרון, לא המזל — היגיעה.' },
+// 26 - הוד שבנצח
+{ q:'גַּם זוּ לְטוֹבָה', s:'רבי נחום איש גמזו, תענית כא, א', e:'רבי נחום חי חיים של סבל פיזי קשה — ועם זאת אמר על כל דבר "גם זו לטובה". זה לא אופטימיות שטחית. זו אמונה עמוקה שהכל — גם מה שנראה רע — הוא חלק ממהלך גדול יותר.' },
+// 27 - יסוד שבנצח
+{ q:'צַדִּיק בֶּאֱמוּנָתוֹ יִחְיֶה', s:'חבקוק ב, ד', e:'הנביא חבקוק, שראה סבל ורשע, הגיע למסקנה אחת: הצדיק יחיה — לא בזכות כוחו או חוכמתו — אלא באמונתו. האמונה היא עוגן שמחזיק גם כשהסערה הכי חזקה.' },
+// 28 - מלכות שבנצח
+{ q:'כִּי נֵר מִצְוָה וְתוֹרָה אוֹר', s:'משלי ו, כג', e:'שלמה המלך מבחין: מצוה — נר. תורה — אור. הנר מאיר רגע; האור ממשיך. כל מצוה שאדם עושה היא נר קטן — אבל התורה שלומד ומנחיל לדורות הבאים — אור עולם.' },
+// 29 - חסד שבהוד
+{ q:'חַיָּב אָדָם לְבָרֵךְ עַל הָרָעָה כְּשֵׁם שֶׁהוּא מְבָרֵךְ עַל הַטּוֹבָה', s:'משנה ברכות ט, ה', e:'מדוע? כי אנחנו רואים רק את ההווה — הקב"ה רואה את התמונה המלאה. מה שנראה לנו רע עכשיו — אולי הוא ממש הטובה הגדולה שמגיעה לנו. ברכה על הרעה היא אמון בסיפור הגדול.' },
+// 30 - גבורה שבהוד
+{ q:'הוֹדוּ לַה\' כִּי טוֹב, כִּי לְעוֹלָם חַסְדּוֹ', s:'תהילים קז, א', e:'הפסוק שחוזר שוב ושוב בתהילים. "לעולם" — לא רק כרגע, לא רק כשטוב לנו. חסד ה\' הוא נצחי, גם כשאנחנו לא מרגישים אותו. ההודיה מזמינה אותנו לראות מעבר לרגע הנוכחי.' },
+// 31 - תפארת שבהוד
+{ q:'לְעוֹלָם יִרְאֶה אָדָם עַצְמוֹ כְּאִלּוּ חֶצְיוֹ חַיָּב וְחֶצְיוֹ זַכַּאי', s:'תלמוד בבלי, קידושין מ, ב', e:'פועל יוצא מדהים מהמשנה: עשה מצוה אחת — הכרעת את עצמך ואת העולם לכף זכות. חטאת — הכרעת הכל לכף חובה. כל מעשה קטן — משנה את המאזניים של העולם.' },
+// 32 - נצח שבהוד
+{ q:'כָּל דִּבּוּרֵי הַתּוֹרָה — כְּגַחֲלֵי אֵשׁ! כִּי הַתּוֹרָה נִקְרֵאת "אֵשׁ דָּת"', s:'רשב"י — רבי שמעון בר יוחאי, ספרי דברים', e:'🔥 לג בעומר — יום ההילולא של רשב"י! הוא גילה שהתורה אינה ספר חוקים יבש — היא אש חיה. ממנו יצא הזוהר הקדוש, ים של אור. יהי זכרו ברוך לעד.' },
+// 33 - הוד שבהוד
+{ q:'כָּל הָאוֹמֵר דָּבָר בְּשֵׁם אוֹמְרוֹ — מֵבִיא גְאֻלָּה לָעוֹלָם', s:'פרקי אבות ו, ו', e:'אסתר אמרה לאחשורוש "בשם מרדכי" — ובזה הובאה הגאולה. לייחס דברים למקורם זה לא רק הגינות — זה פעולה רוחנית שמביאה אור. כשאתה מוסר בשם מישהו — אתה מחבר עולמות.' },
+// 34 - יסוד שבהוד
+{ q:'בְּכָל דּוֹר וָדוֹר חַיָּב אָדָם לִרְאוֹת אֶת עַצְמוֹ כְּאִלּוּ הוּא יָצָא מִמִּצְרַיִם', s:'הגדה של פסח, על פי משנה פסחים י, ה', e:'לא רק לזכור את יציאת מצרים — אלא לחוות אותה. כל אחד מאיתנו יצא ממצרים — מהמצרים שלו, מהכלא הפנימי שלו. החירות היא לא רק היסטוריה — היא אפשרות יומיומית.' },
+// 35 - מלכות שבהוד
+{ q:'מַלְכוּת שָׁמַיִם שְׁלֵמָה אֵינָהּ מִתְגַּלָּה אֶלָּא בִּשְׂמָחָה', s:'ספר בעל שם טוב', e:'הבעל שם טוב מגלה: הקב"ה אינו שורה בתוך עצבות. השכינה שורה רק מתוך שמחה של מצוה. לכן — שמחה אינה מותרות רוחנית; היא תנאי לנוכחות האלוהית.' },
+// 36 - חסד שביסוד
+{ q:'כָּל יִשְׂרָאֵל יֵשׁ לָהֶם חֵלֶק לָעוֹלָם הַבָּא', s:'משנה סנהדרין י, א', e:'פתיחת פרק "חלק" — אחד הפרקים העמוקים במשנה. כל אחד מישראל — ללא יוצא מן הכלל — יש לו חלק לעולם הבא. זה לא פרס — זה עובדה. השאלה היא רק מה נעשה איתו בינתיים.' },
+// 37 - גבורה שביסוד
+{ q:'לֹא עָלֶיךָ הַמְּלָאכָה לִגְמוֹר, וְלֹא אַתָּה בֶּן חוֹרִין לִבָּטֵל מִמֶּנָּה', s:'רבי טרפון, פרקי אבות ב, טז', e:'אחת הפסקאות הגדולות בתולדות המחשבה היהודית. אין חובה להשלים — יש חובה להתחיל ולהמשיך. הפטור מן הניצחון אינו פטור מן המאמץ. כל צעד קטן הוא עולם שלם.' },
+// 38 - תפארת שביסוד
+{ q:'שָׁלוֹם שָׁלוֹם לָרָחוֹק וְלַקָּרוֹב', s:'ישעיהו נז, יט', e:'ישעיהו מגלה שהשלום האלוהי מגיע קודם לרחוק ואחר כך לקרוב. מדוע? כי הרחוק יותר זקוק לו, וגם כי שלום שמגשר על מרחק גדול — הוא שלום אמיתי יותר.' },
+// 39 - נצח שביסוד
+{ q:'כִּי מִצִּיּוֹן תֵּצֵא תוֹרָה וּדְבַר ה\' מִירוּשָׁלָיִם', s:'ישעיהו ב, ג', e:'חזון אחרית הימים: כל האומות עולות להר ה\' ללמוד ממנו. ירושלים — לא בירת כוח, לא בירת כלכלה — אלא בירת חכמה. זה הייעוד שממנו לא נסטה.' },
+// 40 - הוד שביסוד
+{ q:'הֱוֵי שְׁפַל רוּחַ בִּפְנֵי כָּל אָדָם', s:'לויה בן עקסאי, פרקי אבות ד, י', e:'שפלות רוח — לא אומרת שאתה פחות. היא אומרת שאתה גדול מספיק בשביל לכבד כל אחד. האדם הגדול באמת הוא זה שלא צריך להוכיח את גדולתו — כי היא ניכרת בשפלותו.' },
+// 41 - יסוד שביסוד
+{ q:'כָּל אֶחָד וְאֶחָד נִדּוֹן לְפִי רֹב מַעֲשָׂיו', s:'תלמוד בבלי, קידושין מ, ב', e:'הדין הוא על הרוב — לא על הרגע הגרוע ביותר. חיי אדם אינם נשפטים על שיא אחד ולא על שפל אחד. הם מכלול. לכן — כל יום חשוב. כל בחירה חשובה. כל מעשה נספר.' },
+// 42 - מלכות שביסוד
+{ q:'טוֹב שֵׁם מִשֶּׁמֶן טוֹב', s:'קהלת ז, א', e:'שמן טוב ריחו נודף ומרפא — אבל הוא כלה. שם טוב — הוא נצחי. מה שאנשים זוכרים מאיתנו אחרי שנפטרנו — זה הירושה האמיתית. שמן טוב ליום אחד; שם טוב — לנצח.' },
+// 43 - חסד שבמלכות
+{ q:'כָּל מָקוֹם שֶׁאַתָּה עוֹמֵד — שָׁם אַתָּה צָרִיךְ לְהַמְלִיךְ אֶת הַקָּדוֹשׁ בָּרוּךְ הוּא', s:'בעל שם טוב', e:'הבעש"ט מגלה שאין מקומות ח ורחוקים מהקב"ה. בכל מקום שאתה נמצא — בבית, בעסק, ברחוב — שם ממש אפשר לגלות את האלוהות. אין לך לצאת מאיפה שאתה.' },
+// 44 - גבורה שבמלכות
+{ q:'לֵב טָהוֹר בְּרָא לִי אֱלֹהִים, וְרוּחַ נָכוֹן חַדֵּשׁ בְּקִרְבִּי', s:'תהילים נא, יב', e:'תפילת דוד אחרי החטא. הוא אינו מבקש להימחק, אינו מבקש לברוח — הוא מבקש לב טהור ורוח מחודשת. התשובה אינה בריחה מהעבר — היא בניית עתיד חדש.' },
+// 45 - תפארת שבמלכות
+{ q:'לֹא בַשָּׁמַיִם הִיא... כִּי קָרוֹב אֵלֶיךָ הַדָּבָר מְאֹד בְּפִיךָ וּבִלְבָבְךָ לַעֲשֹׂתוֹ', s:'דברים ל, יב–יד', e:'התורה אינה רחוקה. היא לא מעל הכוכבים ולא מעבר לים. היא כאן — בפיך, בלבבך. המשימה אינה בלתי אפשרית. היא ממש כאן, מחכה לך.' },
+// 46 - נצח שבמלכות
+{ q:'תּוֹרָה צִוָּה לָנוּ מֹשֶׁה מוֹרָשָׁה קְהִלַּת יַעֲקֹב', s:'דברים לג, ד', e:'הפסוק הראשון שמלמדים ילד בישראל. התורה היא מורשה — ירושה. לא רק לחכמים, לא רק לרבנים — לכל קהילת יעקב. לכל אחד מאיתנו יש בה חלק שווה.' },
+// 47 - הוד שבמלכות
+{ q:'עֲשֵׂה לְךָ רַב, וּקְנֵה לְךָ חָבֵר', s:'פרקי אבות א, ו', e:'שתי הוראות שכל אחת תובעת פעולה: "עשה לך" — אתה יוצר את הרב, אתה יוצר את החבר. לא מחכים שהם יבואו אליך. צא, מצא מישהו גדול ממך ואחד שווה לך — ולמד מהשניים.' },
+// 48 - יסוד שבמלכות
+{ q:'וְאָהַבְתָּ אֵת ה\' אֱלֹהֶיךָ בְּכָל לְבָבְךָ וּבְכָל נַפְשְׁךָ וּבְכָל מְאֹדֶךָ', s:'דברים ו, ה', e:'"בכל לבבך" — עם שני היצרים, הטוב והרע. "בכל נפשך" — גם אם תיקח את נפשך. "בכל מאודך" — עם כל ממונך. אהבת ה\' אינה רגש בלבד — היא מחויבות של כל הישות.' },
+// 49 - מלכות שבמלכות
+{ q:'סוֹף דָּבָר הַכֹּל נִשְׁמָע — אֶת הָאֱלֹהִים יְרָא וְאֶת מִצְווֹתָיו שְׁמוֹר, כִּי זֶה כָּל הָאָדָם', s:'קהלת יב, יג', e:'שלמה המלך — שניסה הכל, שחקר הכל, שחי הכל — מסכם בפסוק אחד: ירא אלהים ושמור מצוות. זה "כל האדם" — לא חלק ממנו, לא מטרה צדדית — זה כל מהותו. בסוף כל שאלה — תשובה אחת.' }
+];
+
+// ── Contextual Torah content (1-minute read, relevant to current period) ──
+function getContextualTorah(omerDay) {
+    // Determine halachic civil date (Israel time)
+    const nowUTC = new Date();
+    const nowIL = new Date(nowUTC.getTime() + 3 * 3600 * 1000);
+    const h = nowIL.getUTCHours();
+    const d = new Date(Date.UTC(nowIL.getUTCFullYear(), nowIL.getUTCMonth(), nowIL.getUTCDate()));
+    if (h < 20) d.setUTCDate(d.getUTCDate() - 1); // before nightfall = previous Jewish day
+
+    // Special dates 5786 / 2026
+    const CHOL_START  = Date.UTC(2026, 3, 3);  // 16 Nisan — Chol HaMoed begins
+    const CHOL_END    = Date.UTC(2026, 3, 7);  // 20 Nisan
+    const SHVII       = Date.UTC(2026, 3, 8);  // 21 Nisan — Shvi'i shel Pesach
+    const t = d.getTime();
+
+    if (t >= CHOL_START && t <= CHOL_END) return {
+        period: 'חול המועד פסח',
+        title: 'חירות — לא רק מאירוע אלא מצב פנימי',
+        quote: 'בְּכָל דּוֹר וָדוֹר חַיָּב אָדָם לִרְאוֹת אֶת עַצְמוֹ כְּאִלּוּ הוּא יָצָא מִמִּצְרַיִם',
+        source: 'הגדה של פסח — משנה פסחים י, ה',
+        body: `<p>חז"ל לא אמרו לזכור שיצאנו ממצרים — הם אמרו <em>לראות את עצמנו כאילו אנחנו יצאנו</em>. ההבדל עצום. זיכרון הוא פסיבי; ראייה כזו היא חוויה חיה, מחודשת.</p>
+<p>החירות שהתורה מדברת עליה אינה רק שחרור מעבדות — היא מצב פנימי. כל שנה פסח שואל: מאילו כבלים שלי אני עדיין לא חופשי? הרגלים ישנים, פחדים, תבניות חשיבה שמשעבדות מבפנים לפעמים חזק יותר ממצרים.</p>
+<p class="em">ימי חול המועד הם "ימי ביניים" — לא חג מלא, אך גם לא יום רגיל. זה לא מקרה. הקדושה לא שייכת רק לשבת ויום טוב — היא יכולה לחדור לתוך שגרת החיים. השאלה היא אם אנחנו פתוחים לה.</p>
+<p>ספירת העומר שמתחילה ממש עכשיו מלמדת שהחירות אינה נקודה אלא מסע. לצאת ממצרים — זה הצעד הראשון; להגיע להר סיני ולקבל תורה — זה היעד. 49 יום של עבודה פנימית, יום אחד בכל פעם.</p>`
+    };
+
+    if (t === SHVII) return {
+        period: 'שביעי של פסח',
+        title: 'קריעת ים סוף — כשהנס בא תוך כדי הצעד',
+        quote: 'אָז יָשִׁיר מֹשֶׁה וּבְנֵי יִשְׂרָאֵל אֶת הַשִּׁירָה הַזֹּאת',
+        source: 'שמות טו, א',
+        body: `<p>בני ישראל יצאו ממצרים — אך עדיין לא היו חופשיים לגמרי. פרעה רדף מאחור, הים חסם מלפנים. הפחד היה מוחשי. ואז — קריעת ים סוף.</p>
+<p>רבי נחמן מברסלב לימד: הים נקרע רק כאשר נחשון בן עמינדב קפץ למים עד צווארו. הנס לא קדם לאמונה — הוא בא <em>תוך כדי</em> הצעד האמיץ. האמונה לא ממתינה לוודאות; היא מתגלה בתנועה.</p>
+<p class="em">"אָז יָשִׁיר מֹשֶׁה" — לא "שר" אלא "ישיר", לשון עתיד. חז"ל למדו מכאן רמז לתחיית המתים: שירת הים עוד תושר שוב. אך יש כאן גם מסר מיידי — השיר הגדול בא רק אחרי שעברת דרך המים. אי אפשר לשיר אותו קודם.</p>
+<p>שביעי של פסח הוא הזמנה: לקפוץ למים, לצעוד קדימה בלי כל הבטחות, ולגלות שהים נקרע בדיוק בצעד שחשבת שהוא האחרון שלך.</p>`
+    };
+
+    // Lag BaOmer
+    if (omerDay === 33) return {
+        period: 'ל״ג בעומר',
+        title: 'יום ההילולה של רשב"י — האור הנסתר מתגלה',
+        quote: 'כָּל חַיַּי לֹא הָיִיתִי מִתְבַּיֵּשׁ מִדְּבָרַי',
+        source: 'רבי שמעון בר יוחאי — תלמוד בבלי, סוכה מה, ב',
+        body: `<p>ביום פטירתו ביקש רשב"י שיחגגו ולא שיבכו. "יומא דחדוותא הוא" — זה יום שמחה. לא כי מת, אלא כי ביום זה גילה לתלמידיו את סודות התורה הכי עמוקים, ונשמתו עלתה בשלמות.</p>
+<p>רשב"י חי שלוש עשרה שנה במערה, נחבא מהרומאים עם בנו. שם, מנותק לגמרי מהעולם, הוא קיבל גילויים עמוקים שהפכו לזוהר הקדוש. כשיצא בפעם הראשונה — כל מה שהסתכל עליו נשרף מעוצמת הקדושה. נאלץ לחזור. בפעם השנייה — הצליח לחיות בעולם הזה.</p>
+<p class="em">הזוהר מלמד שישנו "אור נסתר" — אור שנגנז בתחילת הבריאה ועתיד להתגלות לצדיקים לעתיד לבוא. ל"ג בעומר הוא רגע שבו אור זה מבצבץ לתוך עולמנו.</p>
+<p>מה הניצוץ הנסתר בתוכך שטרם הוצאת לאור? ל"ג בעומר הוא הזמן הנכון לשאול.</p>`
+    };
+
+    // Week-based content
+    const week = Math.ceil(omerDay / 7);
+    const weeks = [
+        null,
+        { period:'שבוע א׳ — חֶסֶד', title:'לבנות עולם של נתינה', quote:'עוֹלָם חֶסֶד יִבָּנֶה', source:'תהילים פט, ג',
+          body:`<p>השבוע הראשון של הספירה מוקדש למידת החסד — הספירה הראשונה, הקרובה ביותר לאין-סוף. חסד הוא נתינה ללא תנאי, אהבה שאינה מחפשת תמורה.</p>
+<p>אברהם אבינו הוא הדגם המוחלט: יושב בפתח אוהלו ביום חם, שלושה ימים אחרי מילה — ורץ לקראת אורחים. כל ביתו פתוח לכל רוח. אך חז"ל מלמדים שחסד אמיתי דורש גם בינה — לתת את מה שהאחר <em>באמת</em> צריך, לא רק מה שנוח לנו לתת.</p>
+<p class="em">לפעמים החסד הגדול ביותר הוא דווקא לומר "לא", לדחוף את האחר לעמוד על רגליו. נתינה שמנוונת את מי שמקבל — אינה חסד שלם.</p>
+<p>בשבוע זה, שאלו: למי סביבי אני יכול לתת? לא בהכרח כסף — זמן, קשב, חיוך, מילת עידוד. "עולם חסד יבנה" — כל מעשה נתינה בונה עולם.</p>` },
+        { period:'שבוע ב׳ — גְּבוּרָה', title:'הגיבור שמנצח את עצמו', quote:'אֵיזֶהוּ גִבּוֹר? הַכּוֹבֵשׁ אֶת יִצְרוֹ', source:'בן זומא — פרקי אבות ד, א',
+          body:`<p>בן זומא הופך את כל מה שחשבנו שגבורה היא. לא הגיבור הצבאי, לא מי שמנצח בקרב — אלא מי שמנצח את <em>עצמו</em>.</p>
+<p>גבורה היא הכוח לעצור. לא לפצוח עם התגובה הראשונה שעולה. לבחור בשתיקה כשהכעס בוער. לדחות סיפוק מיידי לטובת דבר חשוב יותר. יצחק אבינו — שהגבורה שלו — עמד על המזבח בעקידה ולא ברח. לא כי לא פחד, אלא כי בחר. הגבורה האמיתית אינה היעדר פחד — היא פעולה נכונה <em>למרות</em> הפחד.</p>
+<p class="em">הגמרא אומרת: "לעולם יהיה אדם רך כקנה ואל יהא קשה כארז". הקנה מתכופף ברוח ואינו נשבר. הארז הגאה — נופל. הגמישות הפנימית היא עוצמה.</p>
+<p>בשבוע זה, תרגלו גבורה אחת קטנה ביום: לוותר על משהו, לשמור על זמן לימוד למרות העומס, לאכול בריא כשרוצים ג'אנק. כל פעם שמנצחים את היצר הקטן — בונים שריר שישרת בקרבות הגדולים.</p>` },
+        { period:'שבוע ג׳ — תִּפְאֶרֶת', title:'יופי שבאמת — מצוא את האיזון', quote:'דְּרָכֶיהָ דַרְכֵי נֹעַם וְכָל נְתִיבוֹתֶיהָ שָׁלוֹם', source:'משלי ג, יז',
+          body:`<p>תפארת היא האיזון המושלם בין חסד לגבורה — בין נתינה ללא גבול לבין דין קפדני. יעקב אבינו הוא האיש של תפארת: הוא גם נלחם עם המלאך עד עלות השחר, וגם בכה על צווארו של עשיו אחיו.</p>
+<p>תפארת פירושה גם יופי — לא יופי שטחי, אלא היופי שבדבר האמיתי, השלם, המאוזן. הרמב"ם בספרו "שמונה פרקים" כותב שמידות טובות הן תמיד <em>דרך האמצע</em>. נדיבות יתר עלולה לבזבז; קמצנות — לכלוא. האמת נמצאת בין הקצוות.</p>
+<p class="em">כשאנו אומרים "תפארת ישראל" — אנחנו מדברים על הגאווה הפנימית של מי שהוא באמת מה שהוא. לא מבצג, לא מתכחש — אלא שלם עם עצמו.</p>
+<p>מצאו בשבוע זה דבר אחד בחיים שאינו בשיווי משקל. תנו לו תפארת — מצאו את הביניים שלו.</p>` },
+        { period:'שבוע ד׳ — נֶצַח', title:'עקשנות קדושה — ממשיכים גם כשלא רואים', quote:'נֶצַח יִשְׂרָאֵל לֹא יְשַׁקֵּר', source:'שמואל א, טו, כט',
+          body:`<p>נצח — ניצחון, נצחיות, התמדה. השורש אחד. מי שמתמיד — מנצח. מי שמנצח — נצחי.</p>
+<p>משה רבינו לא ויתר על העם אפילו כשהקב"ה עצמו הציע: "הנח לי ואשמידם ואעשה אותך לגוי גדול". משה סירב. 49 פעמים בא לפרעה. 40 שנה הוביל עם קשה עורף במדבר. "גַּם כִּי אֵלֵךְ בְּגֵיא צַלְמָוֶת לֹא אִירָא רָע" — דוד לא הבטיח שלא יהיו צרות, אלא שלא יפחד.</p>
+<p class="em">האמונה היהודית עצמה היא דוגמה חיה של נצח: אלפי שנות גלות ועינויים, ועם ישראל ממשיך לשמור שבת, ללמוד תורה, לחגוג פסח. זה לא נוחות — זו בחירה.</p>
+<p>הנצח שואל: על מה אתה לא מוותר? מה המטרה שאתה עוקב אחריה גם כשלא רואים תוצאות? הזהו אותה — ושמרו עליה.</p>` },
+        { period:'שבוע ה׳ — הוֹד', title:'כבוד שמשתחווה — לראות את האור שכבר כאן', quote:'הוֹד וְהָדָר לְפָנָיו עֹז וְתִפְאֶרֶת בְּמִקְדָּשׁוֹ', source:'תהילים צו, ו',
+          body:`<p>הוד הוא אחד המושגים הקשים ביותר לתרגום. Splendor? Glory? הקרוב ביותר: הקרנה שבאה מתוך ענווה. ההוד של מי שאינו מחפש אישור — כי הוא יודע מה ערכו.</p>
+<p>אהרן הכהן הוא איש ההוד. כשמשה חזר ממדיין, כתוב: "וְרָאַה אֹתְךָ וְשָׂמַח בְּלִבּוֹ" — אהרן שמח בשמחת אחיו כאילו היא שמחתו שלו. זוהי גדולה נדירה: לא לקנא, אלא לשמוח בהצלחת האחר. מעטים מגיעים לשם.</p>
+<p class="em">הוד קשור להכרת הטוב — "להודות" ו"הוד" מאותו שורש. להיות נוכח בברכות שיש לנו, לא רק ברדיפה אחרי מה שחסר. ההוד הוא ראיית האור שכבר נמצא.</p>
+<p>בשבוע זה, כתבו בכל בוקר שלושה דברים שאתם מכירים בהם תודה — לא הגדולות, דווקא הקטנות. כוס קפה חמה. שיחה טובה. שמש. שם מתחיל ההוד.</p>` },
+        { period:'שבוע ו׳ — יְסוֹד', title:'החיבורים שמחזיקים הכל', quote:'וְצַדִּיק יְסוֹד עוֹלָם', source:'משלי י, כה',
+          body:`<p>יסוד הוא הבסיס שעליו הכל עומד — לא רק פיזי, אלא הברית, ההתחייבות, הנאמנות. יוסף הצדיק הוא איש היסוד: עמד בפיתוי הגדול, לא בגד, שמר על אמת גם כשאף אחד לא ראה. בזכות יסוד שלו — כל שבטי ישראל שרדו.</p>
+<p>היסוד הוא גם חיבור בין עליונים לתחתונים, בין שמים לארץ. בלי יסוד, כל בניין נופל — לא משנה כמה יפה הוא נראה מבחוץ. כמה פעמים ראינו דברים גדולים שהתפוררו כי לא הייתה להם אמת בפנים?</p>
+<p class="em">ישנו ניסוח יפה מהחסידות: "כשאדם יודע מה ה-יסוד שלו — הוא יודע מי הוא". מה הדבר שאם תסיר אותו מחיייך — הכל קורס? אותו דבר הוא היסוד שלך.</p>
+<p>בשבוע זה, בדקו אחת ההתחייבויות שלכם — לאדם קרוב, לעצמכם, לעקרון. האם היא עדיין שלמה? היסוד צריך תחזוקה.</p>` },
+        { period:'שבוע ז׳ — מַלְכוּת', title:'מוכנים לקבל — ערב מתן תורה', quote:'כִּי מִצִּיּוֹן תֵּצֵא תוֹרָה וּדְבַר ה׳ מִירוּשָׁלָיִם', source:'ישעיהו ב, ג',
+          body:`<p>אנחנו בשבוע האחרון של הספירה — שבוע המלכות. מלכות היא הספירה שמקבלת מכולן ומאירה לעולם. כנסת ישראל, השכינה, מלכות בית דוד — כולן מלכות.</p>
+<p>49 יום עבדנו על עצמנו: שבוע של חסד, שבוע של גבורה, שבוע של תפארת. כל זה לא בשביל עצמנו — אלא כדי להיות <em>ראויים לקבל</em>. כי שבועות, חג מתן תורה, הולך ובא.</p>
+<p class="em">התורה לא ניתנה להרים. "לא בשמים היא" — היא ניתנת לבני אדם, בשר ודם, עם ספקות ועם פחדים. בדיוק כי אנחנו כאלה — יש ערך עצום לבחירה שלנו ללמוד, לשמור, לחיות לפיה.</p>
+<p>מלכות שואלת: כמה מקום פינינו בפנים? כי ממלא כלים מלאים לא ניתן לתת. השבוע הזה הוא הכנה האחרונה — לרוקן, לשתוק, לחכות לדבר שגדול מאתנו.</p>` }
+    ];
+
+    const w = weeks[Math.min(week, 7)];
+    if (!w) {
+        const t = torahThoughts[omerDay];
+        return { period: `יום ${omerDay} לעומר`, title: sefirot[omerDay], quote: t.q, source: t.s, body: `<p>${t.e}</p>` };
+    }
+    return w;
+}
+
+function getOmerFormula(day) {
+    const weeks = Math.floor(day / 7);
+    const remaining = day % 7;
+    let dayPart = day === 1 ? 'יוֹם אֶחָד' : hebrewNumbers[day] + ' יָמִים';
+    let weeksPart = '';
+    if (weeks > 0) {
+        weeksPart = ' שֶׁהֵם ' + weekNames[weeks];
+        if (remaining === 1) weeksPart += ' וְיוֹם אֶחָד';
+        else if (remaining > 1) weeksPart += ' וְ' + hebrewNumbers[remaining] + ' יָמִים';
+    }
+    return { dayPart, weeksPart };
+}
+
+function getTodayOmerDay() {
+    // Israel is UTC+3 in April (IDT). Add offset manually — avoids toLocaleString browser inconsistencies.
+    const nowUTC = new Date();
+    const israelOffsetMs = 3 * 60 * 60 * 1000;
+    const nowIsrael = new Date(nowUTC.getTime() + israelOffsetMs);
+
+    const hour = nowIsrael.getUTCHours();
+
+    // Nightfall (צאת הכוכבים) approximation for Israel in April: ~20:00 IDT
+    const isAfterNightfall = hour >= 20;
+
+    // Build today's date in Israel (UTC-based, after applying offset)
+    const halachicDate = new Date(Date.UTC(
+        nowIsrael.getUTCFullYear(),
+        nowIsrael.getUTCMonth(),
+        nowIsrael.getUTCDate()
+    ));
+    // Before nightfall = still on the previous Jewish day
+    if (!isAfterNightfall) {
+        halachicDate.setUTCDate(halachicDate.getUTCDate() - 1);
+    }
+
+    const start = new Date(Date.UTC(2026, 3, 2)); // April 2, 2026 — Day 1 of Omer
+    return Math.floor((halachicDate - start) / 86400000) + 1;
+}
+
+function getHebrewDate() {
+    return new Date().toLocaleDateString('he-IL', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+function render() {
+    const day = getTodayOmerDay();
+    const el = document.getElementById('content');
+
+    if (day < 1) {
+        const d = 1 - day;
+        el.innerHTML = `<p class="header-title">ספירת העומר</p>
+        <div class="message-card">🌸 הספירה מתחילה בעוד ${d === 0 ? 'הלילה!' : d + ' ימים'}</div>
+        <p class="message-sub">חג פסח שמח! 🎊</p>
+        <p class="date-display">${getHebrewDate()}</p>`;
+        return;
+    }
+    if (day > 49) {
+        el.innerHTML = `<p class="header-title">✨ חג שבועות שמח! ✨</p>
+        <div class="message-card">🌸 תורה וחיים לעם ישראל! 🌸</div>
+        <p class="date-display">${getHebrewDate()}</p>`;
+        return;
+    }
+
+    const { dayPart, weeksPart } = getOmerFormula(day);
+    const sefirah = sefirot[day];
+    const torah = getContextualTorah(day);
+    const isLag = day === 33;
+
+    el.innerHTML = `
+        <p class="header-title">${isLag ? '🔥 לג בעומר 🔥' : 'ספירת העומר'}</p>
+        <div class="sefirah-badge">${sefirah}</div>
+        <span class="day-number">${day}</span>
+
+        <!-- ברכה -->
+        <div class="bracha-section">
+            <p class="section-label">📖 נוסח הספרדים</p>
+            <p class="bracha-text">
+                <span class="bracha-highlight">בָּרוּךְ אַתָּה ה\' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם,</span><br>
+                אֲשֶׁר קִדְּשָׁנוּ בְּמִצְווֹתָיו<br>
+                <span class="bracha-highlight">וְצִוָּנוּ עַל סְפִירַת הָעֹמֶר.</span>
+            </p>
+        </div>
+
+        <!-- הספירה -->
+        <p class="omer-text">
+            הַיּוֹם ${dayPart}
+            ${weeksPart ? `<br><span class="weeks-part">${weeksPart}</span>` : ''}
+            <br>לָעֹמֶר
+        </p>
+
+        <!-- הרחמן -->
+        <div class="harachaman-section">
+            <p class="section-label">🙏 הרחמן</p>
+            <p class="harachaman-text">
+                הָרַחֲמָן הוּא יַחֲזִיר לָנוּ עֲבוֹדַת בֵּית הַמִּקְדָּשׁ לִמְקוֹמָהּ,<br>
+                בִּמְהֵרָה בְּיָמֵינוּ, אָמֵן סֶלָה.
+            </p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- דבר תורה -->
+        <div class="torah-section">
+            <p class="section-label">📖 דבר תורה — ${torah.period}</p>
+            <p class="torah-period-title">${torah.title}</p>
+            <p class="torah-quote">${torah.quote}</p>
+            <p class="torah-source">— ${torah.source}</p>
+            <div class="torah-body">${torah.body}</div>
+        </div>
+
+        <p class="date-display">${getHebrewDate()}</p>
+    `;
+}
+
+// Stars & particles
+function createStars() {
+    const c = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+        const s = document.createElement('div'); s.className = 'star';
+        const sz = Math.random()*2.5+0.5;
+        s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${Math.random()*4+2}s;--delay:${Math.random()*6}s;--max-opacity:${Math.random()*0.7+0.3}`;
+        c.appendChild(s);
+    }
+}
+function createParticles() {
+    const c = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div'); p.className = 'particle';
+        p.style.cssText = `--left:${Math.random()*100}%;--dur:${Math.random()*10+6}s;--delay:${Math.random()*10}s`;
+        c.appendChild(p);
+    }
+}
+createStars(); createParticles(); render();
+
+// ════════════════════════════════════════════════
+// ═══════   DAILY TORAH LEARNING FEATURE   ═══════
+// ════════════════════════════════════════════════
+
+// ── View Switcher ──
+function switchView(view) {
+    const omer = document.getElementById('omerView');
+    const learning = document.getElementById('learningView');
+    const btnOmer = document.getElementById('navOmer');
+    const btnLearn = document.getElementById('navLearn');
+    if (view === 'omer') {
+        omer.style.display = '';
+        learning.style.display = 'none';
+        btnOmer.classList.add('active');
+        btnLearn.classList.remove('active');
+    } else {
+        omer.style.display = 'none';
+        learning.style.display = 'block';
+        btnOmer.classList.remove('active');
+        btnLearn.classList.add('active');
+        initLearning();
+    }
+}
+
+// ── Data: Parasha Schedule 5786 ──
+// Shabbat dates (Israel) → parasha name + chapters (one per reading session)
+const PARASHA_SCHEDULE = [
+    { name: 'שמיני',          shabbat: new Date(2026, 3, 11),
+      chapters: ['Leviticus 9','Leviticus 10','Leviticus 11'] },
+    { name: 'תזריע-מצורע',    shabbat: new Date(2026, 3, 18),
+      chapters: ['Leviticus 12','Leviticus 13','Leviticus 14','Leviticus 15'] },
+    { name: 'אחרי מות-קדושים',shabbat: new Date(2026, 3, 25),
+      chapters: ['Leviticus 16','Leviticus 17','Leviticus 18','Leviticus 19','Leviticus 20'] },
+    { name: 'אמור',           shabbat: new Date(2026, 4, 2),
+      chapters: ['Leviticus 21','Leviticus 22','Leviticus 23','Leviticus 24'] },
+    { name: 'בהר-בחוקותי',    shabbat: new Date(2026, 4, 9),
+      chapters: ['Leviticus 25','Leviticus 26','Leviticus 27'] },
+    { name: 'במדבר',          shabbat: new Date(2026, 4, 16),
+      chapters: ['Numbers 1','Numbers 2','Numbers 3','Numbers 4'] },
+    { name: 'נשא',            shabbat: new Date(2026, 4, 23),
+      chapters: ['Numbers 5','Numbers 6','Numbers 7'] },
+    { name: 'בהעלותך',        shabbat: new Date(2026, 4, 30),
+      chapters: ['Numbers 8','Numbers 9','Numbers 10','Numbers 11','Numbers 12'] },
+    { name: 'שלח',            shabbat: new Date(2026, 5, 6),
+      chapters: ['Numbers 13','Numbers 14','Numbers 15'] },
+    { name: 'קורח',           shabbat: new Date(2026, 5, 13),
+      chapters: ['Numbers 16','Numbers 17','Numbers 18','Numbers 19'] },
+    { name: 'חוקת',           shabbat: new Date(2026, 5, 20),
+      chapters: ['Numbers 20','Numbers 21','Numbers 22'] },
+    { name: 'בלק',            shabbat: new Date(2026, 5, 27),
+      chapters: ['Numbers 22','Numbers 23','Numbers 24','Numbers 25'] },
+    { name: 'פינחס',          shabbat: new Date(2026, 6, 4),
+      chapters: ['Numbers 26','Numbers 27','Numbers 28','Numbers 29'] },
+    { name: 'מטות-מסעי',      shabbat: new Date(2026, 6, 11),
+      chapters: ['Numbers 30','Numbers 31','Numbers 32','Numbers 33','Numbers 34','Numbers 35','Numbers 36'] },
+    { name: 'דברים',          shabbat: new Date(2026, 6, 18),
+      chapters: ['Deuteronomy 1','Deuteronomy 2','Deuteronomy 3'] },
+];
+
+// ── Data: Mishna Order ──
+const MISHNA_ORDER = [
+    { name:'אבות', english:'Avot', perakim:6 },
+    { name:'ברכות', english:'Berakhot', perakim:9 },
+    { name:'פאה', english:'Peah', perakim:8 },
+    { name:'דמאי', english:'Demai', perakim:7 },
+    { name:'כלאים', english:'Kilayim', perakim:9 },
+    { name:'שביעית', english:'Sheviit', perakim:10 },
+    { name:'תרומות', english:'Terumot', perakim:11 },
+    { name:'מעשרות', english:'Maasrot', perakim:5 },
+    { name:'מעשר שני', english:'Maaser Sheni', perakim:5 },
+    { name:'חלה', english:'Challah', perakim:4 },
+    { name:'ערלה', english:'Orlah', perakim:3 },
+    { name:'ביכורים', english:'Bikkurim', perakim:4 },
+    { name:'שבת', english:'Shabbat', perakim:24 },
+    { name:'עירובין', english:'Eruvin', perakim:10 },
+    { name:'פסחים', english:'Pesachim', perakim:10 },
+    { name:'שקלים', english:'Shekalim', perakim:8 },
+    { name:'יומא', english:'Yoma', perakim:8 },
+    { name:'סוכה', english:'Sukkah', perakim:5 },
+    { name:'ביצה', english:'Beitzah', perakim:5 },
+    { name:'ראש השנה', english:'Rosh Hashanah', perakim:4 },
+    { name:'תענית', english:'Taanit', perakim:4 },
+    { name:'מגילה', english:'Megillah', perakim:4 },
+    { name:'מועד קטן', english:'Moed Katan', perakim:3 },
+    { name:'חגיגה', english:'Chagigah', perakim:3 },
+    { name:'יבמות', english:'Yevamot', perakim:16 },
+    { name:'כתובות', english:'Ketubot', perakim:13 },
+    { name:'נדרים', english:'Nedarim', perakim:11 },
+    { name:'נזיר', english:'Nazir', perakim:9 },
+    { name:'סוטה', english:'Sotah', perakim:9 },
+    { name:'גיטין', english:'Gittin', perakim:9 },
+    { name:'קידושין', english:'Kiddushin', perakim:4 },
+    { name:'בבא קמא', english:'Bava Kamma', perakim:10 },
+    { name:'בבא מציעא', english:'Bava Metzia', perakim:10 },
+    { name:'בבא בתרא', english:'Bava Batra', perakim:10 },
+    { name:'סנהדרין', english:'Sanhedrin', perakim:11 },
+    { name:'מכות', english:'Makkot', perakim:3 },
+    { name:'שבועות', english:'Shevuot', perakim:8 },
+    { name:'עדויות', english:'Eduyot', perakim:8 },
+    { name:'עבודה זרה', english:'Avodah Zarah', perakim:5 },
+    { name:'הוריות', english:'Horayot', perakim:3 },
+    { name:'זבחים', english:'Zevachim', perakim:14 },
+    { name:'מנחות', english:'Menachot', perakim:13 },
+    { name:'חולין', english:'Chullin', perakim:12 },
+    { name:'בכורות', english:'Bechorot', perakim:9 },
+    { name:'ערכין', english:'Arakhin', perakim:9 },
+    { name:'תמורה', english:'Temurah', perakim:7 },
+    { name:'כריתות', english:'Keritot', perakim:6 },
+    { name:'מעילה', english:'Meilah', perakim:6 },
+    { name:'תמיד', english:'Tamid', perakim:7 },
+    { name:'מידות', english:'Middot', perakim:5 },
+    { name:'קינים', english:'Kinnim', perakim:3 },
+    { name:'כלים', english:'Kelim', perakim:30 },
+    { name:'אהלות', english:'Oholot', perakim:18 },
+    { name:'נגעים', english:'Negaim', perakim:14 },
+    { name:'פרה', english:'Parah', perakim:12 },
+    { name:'טהרות', english:'Tohorot', perakim:10 },
+    { name:'מקואות', english:'Mikvaot', perakim:10 },
+    { name:'נידה', english:'Niddah', perakim:10 },
+    { name:'מכשירין', english:'Makhshirin', perakim:6 },
+    { name:'זבים', english:'Zavim', perakim:5 },
+    { name:'טבול יום', english:'Tevul Yom', perakim:4 },
+    { name:'ידים', english:'Yadayim', perakim:4 },
+    { name:'עוקצין', english:'Oktzin', perakim:3 },
+];
+
+// ── Data: Tanakh Order (Nevi'im + Ketuvim) ──
+const TANAKH_ORDER = [
+    { name:'יהושע', english:'Joshua', perakim:24 },
+    { name:'שופטים', english:'Judges', perakim:21 },
+    { name:'שמואל א', english:'I Samuel', perakim:31 },
+    { name:'שמואל ב', english:'II Samuel', perakim:24 },
+    { name:'מלכים א', english:'I Kings', perakim:22 },
+    { name:'מלכים ב', english:'II Kings', perakim:25 },
+    { name:'ישעיהו', english:'Isaiah', perakim:66 },
+    { name:'ירמיהו', english:'Jeremiah', perakim:52 },
+    { name:'יחזקאל', english:'Ezekiel', perakim:48 },
+    { name:'הושע', english:'Hosea', perakim:14 },
+    { name:'יואל', english:'Joel', perakim:4 },
+    { name:'עמוס', english:'Amos', perakim:9 },
+    { name:'עובדיה', english:'Obadiah', perakim:1 },
+    { name:'יונה', english:'Jonah', perakim:4 },
+    { name:'מיכה', english:'Micah', perakim:7 },
+    { name:'נחום', english:'Nahum', perakim:3 },
+    { name:'חבקוק', english:'Habakkuk', perakim:3 },
+    { name:'צפניה', english:'Zephaniah', perakim:3 },
+    { name:'חגי', english:'Haggai', perakim:2 },
+    { name:'זכריה', english:'Zechariah', perakim:14 },
+    { name:'מלאכי', english:'Malachi', perakim:3 },
+    { name:'תהילים', english:'Psalms', perakim:150 },
+    { name:'משלי', english:'Proverbs', perakim:31 },
+    { name:'איוב', english:'Job', perakim:42 },
+    { name:'שיר השירים', english:'Song of Songs', perakim:8 },
+    { name:'רות', english:'Ruth', perakim:4 },
+    { name:'איכה', english:'Lamentations', perakim:5 },
+    { name:'קהלת', english:'Ecclesiastes', perakim:12 },
+    { name:'אסתר', english:'Esther', perakim:10 },
+    { name:'דניאל', english:'Daniel', perakim:12 },
+    { name:'עזרא', english:'Ezra', perakim:10 },
+    { name:'נחמיה', english:'Nehemiah', perakim:13 },
+    { name:'דברי הימים א', english:'I Chronicles', perakim:29 },
+    { name:'דברי הימים ב', english:'II Chronicles', perakim:36 },
+];
+
+// ── LocalStorage helpers ──
+function loadProgress() {
+    try {
+        const raw = localStorage.getItem('torahLearning');
+        if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return { parasha: { parashaIndex: 0, aliyahIndex: 0 }, mishna: { masechetIndex: 0, perekIndex: 0 }, tanakh: { seferIndex: 0, perekIndex: 0 } };
+}
+function saveProgress(prog) {
+    localStorage.setItem('torahLearning', JSON.stringify(prog));
+}
+
+// ── State ──
+let prog = loadProgress();
+let parashaTextMode = 'heb'; // 'heb' | 'targum'
+let parashaFetched = { heb: null, targum: null, ref: null };
+let mishnaFetched = null;
+let tanakhFetched = null;
+let parashaOpen = false;
+let mishnaOpen = false;
+let tanakhOpen = false;
+
+// ── Parasha helpers ──
+function getCurrentParasha() {
+    // Find current shabbat's parasha based on today's date
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    // Find the first parasha whose shabbat is >= today, or the last one
+    for (let i = 0; i < PARASHA_SCHEDULE.length; i++) {
+        if (PARASHA_SCHEDULE[i].shabbat >= today) return i;
+    }
+    return PARASHA_SCHEDULE.length - 1;
+}
+
+function getParashaIndex() {
+    // If user has set a parashaIndex in progress use it, otherwise auto-detect
+    return prog.parasha.parashaIndex;
+}
+
+function initParashaAutoDetect() {
+    // Only auto-set if the user hasn't manually advanced (still at index 0 aliyah 0)
+    const autoIdx = getCurrentParasha();
+    if (prog.parasha.parashaIndex === 0 && prog.parasha.aliyahIndex === 0) {
+        prog.parasha.parashaIndex = autoIdx;
+        saveProgress(prog);
+    }
+}
+
+const BOOK_HE = { Leviticus:'ויקרא', Numbers:'במדבר', Deuteronomy:'דברים', Genesis:'בראשית', Exodus:'שמות' };
+const HE_NUMS = ['','א','ב','ג','ד','ה','ו','ז','ח','ט','י','יא','יב','יג','יד','טו','טז','יז','יח','יט','כ','כא','כב','כג','כד','כה','כו','כז','כח','כט','ל','לא','לב','לג','לד','לה','לו'];
+function chapterLabel(ref) {
+    const m = ref.match(/^(\w+)\s+(\d+)$/);
+    if (!m) return ref;
+    const book = BOOK_HE[m[1]] || m[1];
+    const num  = +m[2];
+    return book + ' פרק ' + (HE_NUMS[num] || num) + "'";
+}
+
+function updateParashaUI() {
+    const pIdx = prog.parasha.parashaIndex;
+    const cIdx = prog.parasha.aliyahIndex; // reused as chapterIndex
+    if (pIdx >= PARASHA_SCHEDULE.length) {
+        document.getElementById('parashaSubtitle').textContent = 'כל הפרשות הושלמו! 🎉';
+        return;
+    }
+    const p = PARASHA_SCHEDULE[pIdx];
+    document.getElementById('parashaSubtitle').textContent = 'פרשת ' + p.name;
+    const ref = p.chapters[cIdx] || p.chapters[0];
+    document.getElementById('parashaCurrentAliyah').textContent = chapterLabel(ref);
+    const total = p.chapters.length;
+    const pct = Math.round((cIdx / total) * 100);
+    document.getElementById('parashaProgressLabel').textContent = 'פרק ' + (cIdx+1) + ' מתוך ' + total;
+    document.getElementById('parashaProgressBar').style.width = Math.max(6, pct) + '%';
+}
+
+function toggleParashaText() {
+    const panel = document.getElementById('parashaTextPanel');
+    if (parashaOpen) {
+        panel.classList.remove('open');
+        parashaOpen = false;
+    } else {
+        panel.classList.add('open');
+        parashaOpen = true;
+        fetchParashaText();
+    }
+}
+
+function showParashaMode(mode) {
+    parashaTextMode = mode;
+    document.getElementById('btnHeb').classList.toggle('active', mode === 'heb');
+    document.getElementById('btnTargum').classList.toggle('active', mode === 'targum');
+    renderParashaText();
+    if (mode === 'targum' && !parashaFetched.targum) {
+        fetchParashaText(true);
+    }
+}
+
+async function fetchParashaText(targumOnly = false) {
+    const pIdx = prog.parasha.parashaIndex;
+    const cIdx = prog.parasha.aliyahIndex;
+    if (pIdx >= PARASHA_SCHEDULE.length) return;
+    const ref = PARASHA_SCHEDULE[pIdx].chapters[cIdx];
+    if (!ref) return;
+    const cacheKey  = 'parasha_ch_' + ref;
+    const cacheKeyT = 'parasha_cht_' + ref;
+
+    // Clear in-memory cache if we moved to a different chapter
+    if (parashaFetched.ref !== ref) {
+        parashaFetched = { heb: null, targum: null, ref: ref };
+    }
+
+    if (!targumOnly) {
+        if (parashaFetched.heb) { renderParashaText(); return; }
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) { parashaFetched.heb = JSON.parse(cached); renderParashaText(); return; }
+        showSpinner('parashaTextContent');
+        try {
+            const url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(ref) + '?lang=he&commentary=0';
+            const r = await fetch(url);
+            const data = await r.json();
+            parashaFetched.heb = data;
+            sessionStorage.setItem(cacheKey, JSON.stringify(data));
+            renderParashaText();
+        } catch(e) { showError('parashaTextContent', 'שגיאה בטעינת הטקסט. אנא נסה שוב.'); }
+    } else {
+        if (parashaFetched.targum) { renderParashaText(); return; }
+        const cached = sessionStorage.getItem(cacheKeyT);
+        if (cached) { parashaFetched.targum = JSON.parse(cached); renderParashaText(); return; }
+        showSpinner('parashaTextContent');
+        try {
+            const onkelosRef = 'Onkelos ' + ref;
+            const url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(onkelosRef) + '?lang=he&commentary=0';
+            const r = await fetch(url);
+            const data = await r.json();
+            if (!data.he || (Array.isArray(data.he) && data.he.length === 0)) throw new Error('empty');
+            parashaFetched.targum = data;
+            sessionStorage.setItem(cacheKeyT, JSON.stringify(data));
+            renderParashaText();
+        } catch(e) { showError('parashaTextContent', 'תרגום אונקלוס אינו זמין כרגע.'); }
+    }
+}
+
+function renderParashaText() {
+    const el = document.getElementById('parashaTextContent');
+    const mode = parashaTextMode;
+    const data = mode === 'heb' ? parashaFetched.heb : parashaFetched.targum;
+    if (!data) { if (mode === 'targum') fetchParashaText(true); return; }
+
+    // Use sections/toSections from the API response to extract exactly the right verses
+    // Sefaria returns the full chapter — display it all (chapters are the reading unit now)
+    const verses = flattenText(data.he || data.text, true);
+    if (!verses || verses.length === 0) { el.innerHTML = '<div class="error-msg">הטקסט אינו זמין כרגע</div>'; return; }
+
+    let html = '<div class="text-content">';
+    verses.forEach((v, i) => {
+        if (v && v.trim()) {
+            html += '<span class="verse"><span class="verse-num">' + (i+1) + '</span>' + v + '</span>';
+        }
+    });
+    html += '</div>';
+    el.innerHTML = html;
+}
+
+function markParashaDone() {
+    parashaFetched = { heb: null, targum: null, ref: null };
+    parashaOpen = false;
+    document.getElementById('parashaTextPanel').classList.remove('open');
+    const p = PARASHA_SCHEDULE[prog.parasha.parashaIndex];
+    if (!p) return;
+    prog.parasha.aliyahIndex++;
+    if (prog.parasha.aliyahIndex >= p.chapters.length) {
+        prog.parasha.aliyahIndex = 0;
+        prog.parasha.parashaIndex++;
+    }
+    saveProgress(prog);
+    updateParashaUI();
+    flashDone('parashaDoneBtn');
+    flashDone('parashaDoneBtnBottom');
+}
+
+function goBackParasha() {
+    parashaFetched = { heb: null, targum: null, ref: null };
+    parashaOpen = false;
+    document.getElementById('parashaTextPanel').classList.remove('open');
+    if (prog.parasha.aliyahIndex > 0) {
+        prog.parasha.aliyahIndex--;
+    } else if (prog.parasha.parashaIndex > 0) {
+        prog.parasha.parashaIndex--;
+        const prev = PARASHA_SCHEDULE[prog.parasha.parashaIndex];
+        prog.parasha.aliyahIndex = prev.chapters.length - 1;
+    }
+    saveProgress(prog);
+    updateParashaUI();
+}
+
+// ── Mishna helpers ──
+function updateMishnaUI() {
+    const mIdx = prog.mishna.masechetIndex;
+    const pIdx = prog.mishna.perekIndex;
+    if (mIdx >= MISHNA_ORDER.length) { document.getElementById('mishnaSubtitle').textContent = 'כל המשנה הושלמה! 🎉'; return; }
+    const m = MISHNA_ORDER[mIdx];
+    document.getElementById('mishnaSubtitle').textContent = 'מסכת ' + m.name;
+    document.getElementById('mishtaCurrentPerek').textContent = 'פרק ' + (pIdx+1);
+    const pct = Math.round((pIdx / m.perakim) * 100);
+    document.getElementById('mishnaProgressLabel').textContent = 'פרק ' + (pIdx+1) + ' מתוך ' + m.perakim;
+    document.getElementById('mishnaProgressBar').style.width = Math.max(4, pct) + '%';
+}
+
+function toggleMishnaText() {
+    const panel = document.getElementById('mishnaTextPanel');
+    if (mishnaOpen) {
+        panel.classList.remove('open');
+        mishnaOpen = false;
+    } else {
+        panel.classList.add('open');
+        mishnaOpen = true;
+        fetchMishnaText();
+    }
+}
+
+async function fetchMishnaText() {
+    const mIdx = prog.mishna.masechetIndex;
+    const pIdx = prog.mishna.perekIndex;
+    if (mIdx >= MISHNA_ORDER.length) return;
+    const m = MISHNA_ORDER[mIdx];
+    const ref = 'Mishnah_' + m.english + '.' + (pIdx+1);
+    const cacheKey = 'mishna_' + ref;
+    const el = document.getElementById('mishnaTextContent');
+
+    if (mishnaFetched) { renderMishnaText(mishnaFetched); return; }
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) { mishnaFetched = JSON.parse(cached); renderMishnaText(mishnaFetched); return; }
+
+    showSpinner('mishnaTextContent');
+    try {
+        const url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(ref) + '?lang=he&commentary=0';
+        const r = await fetch(url);
+        const data = await r.json();
+        mishnaFetched = data;
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        renderMishnaText(data);
+    } catch(e) { showError('mishnaTextContent', 'שגיאה בטעינת הטקסט. אנא נסה שוב.'); }
+}
+
+function renderMishnaText(data) {
+    const el = document.getElementById('mishnaTextContent');
+    const verses = flattenText(data.he || data.text);
+    if (!verses || verses.length === 0) { el.innerHTML = '<div class="error-msg">הטקסט אינו זמין כרגע</div>'; return; }
+    let html = '<div class="text-content">';
+    verses.forEach((v, i) => {
+        if (v && v.trim()) html += '<span class="verse"><span class="verse-num">' + (i+1) + '</span>' + v + '</span>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+}
+
+function markMishnaDone() {
+    mishnaFetched = null;
+    mishnaOpen = false;
+    document.getElementById('mishnaTextPanel').classList.remove('open');
+    const m = MISHNA_ORDER[prog.mishna.masechetIndex];
+    if (!m) return;
+    prog.mishna.perekIndex++;
+    if (prog.mishna.perekIndex >= m.perakim) {
+        prog.mishna.perekIndex = 0;
+        prog.mishna.masechetIndex++;
+    }
+    saveProgress(prog);
+    updateMishnaUI();
+    flashDone('mishnaDoneBtn');
+    flashDone('mishnaDoneBtnBottom');
+}
+
+function goBackMishna() {
+    mishnaFetched = null;
+    mishnaOpen = false;
+    document.getElementById('mishnaTextPanel').classList.remove('open');
+    if (prog.mishna.perekIndex > 0) {
+        prog.mishna.perekIndex--;
+    } else if (prog.mishna.masechetIndex > 0) {
+        prog.mishna.masechetIndex--;
+        prog.mishna.perekIndex = MISHNA_ORDER[prog.mishna.masechetIndex].perakim - 1;
+    }
+    saveProgress(prog);
+    updateMishnaUI();
+}
+
+// ── Tanakh helpers ──
+function updateTanakhUI() {
+    const sIdx = prog.tanakh.seferIndex;
+    const pIdx = prog.tanakh.perekIndex;
+    if (sIdx >= TANAKH_ORDER.length) { document.getElementById('tanakhSubtitle').textContent = 'כל הנ״ך הושלם! 🎉'; return; }
+    const s = TANAKH_ORDER[sIdx];
+    document.getElementById('tanakhSubtitle').textContent = s.name;
+    document.getElementById('tanakhCurrentPerek').textContent = 'פרק ' + (pIdx+1);
+    const pct = Math.round((pIdx / s.perakim) * 100);
+    document.getElementById('tanakhProgressLabel').textContent = 'פרק ' + (pIdx+1) + ' מתוך ' + s.perakim;
+    document.getElementById('tanakhProgressBar').style.width = Math.max(4, pct) + '%';
+}
+
+function toggleTanakhText() {
+    const panel = document.getElementById('tanakhTextPanel');
+    if (tanakhOpen) {
+        panel.classList.remove('open');
+        tanakhOpen = false;
+    } else {
+        panel.classList.add('open');
+        tanakhOpen = true;
+        fetchTanakhText();
+    }
+}
+
+async function fetchTanakhText() {
+    const sIdx = prog.tanakh.seferIndex;
+    const pIdx = prog.tanakh.perekIndex;
+    if (sIdx >= TANAKH_ORDER.length) return;
+    const s = TANAKH_ORDER[sIdx];
+    const ref = s.english + '.' + (pIdx+1);
+    const cacheKey = 'tanakh_' + ref;
+
+    if (tanakhFetched) { renderTanakhText(tanakhFetched); return; }
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) { tanakhFetched = JSON.parse(cached); renderTanakhText(tanakhFetched); return; }
+
+    showSpinner('tanakhTextContent');
+    try {
+        const url = 'https://www.sefaria.org/api/texts/' + encodeURIComponent(ref) + '?lang=he&commentary=0';
+        const r = await fetch(url);
+        const data = await r.json();
+        tanakhFetched = data;
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        renderTanakhText(data);
+    } catch(e) { showError('tanakhTextContent', 'שגיאה בטעינת הטקסט. אנא נסה שוב.'); }
+}
+
+function renderTanakhText(data) {
+    const el = document.getElementById('tanakhTextContent');
+    const verses = flattenText(data.he || data.text, true); // strip taamim
+    if (!verses || verses.length === 0) { el.innerHTML = '<div class="error-msg">הטקסט אינו זמין כרגע</div>'; return; }
+    let html = '<div class="text-content">';
+    verses.forEach((v, i) => {
+        if (v && v.trim()) html += '<span class="verse"><span class="verse-num">' + (i+1) + '</span>' + v + '</span>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+}
+
+function markTanakhDone() {
+    tanakhFetched = null;
+    tanakhOpen = false;
+    document.getElementById('tanakhTextPanel').classList.remove('open');
+    const s = TANAKH_ORDER[prog.tanakh.seferIndex];
+    if (!s) return;
+    prog.tanakh.perekIndex++;
+    if (prog.tanakh.perekIndex >= s.perakim) {
+        prog.tanakh.perekIndex = 0;
+        prog.tanakh.seferIndex++;
+    }
+    saveProgress(prog);
+    updateTanakhUI();
+    flashDone('tanakhDoneBtn');
+    flashDone('tanakhDoneBtnBottom');
+}
+
+function goBackTanakh() {
+    tanakhFetched = null;
+    tanakhOpen = false;
+    document.getElementById('tanakhTextPanel').classList.remove('open');
+    if (prog.tanakh.perekIndex > 0) {
+        prog.tanakh.perekIndex--;
+    } else if (prog.tanakh.seferIndex > 0) {
+        prog.tanakh.seferIndex--;
+        prog.tanakh.perekIndex = TANAKH_ORDER[prog.tanakh.seferIndex].perakim - 1;
+    }
+    saveProgress(prog);
+    updateTanakhUI();
+}
+
+// ── Utility helpers ──
+// Strip cantillation marks (טעמים U+0591–U+05AF) but keep vowels (ניקוד U+05B0–U+05C7)
+function stripTaamim(str) {
+    return str.replace(/[\u0591-\u05AF]/g, '');
+}
+
+// Sefaria always returns full chapter(s). Use sections/toSections from the response to slice.
+function sliceVersesByData(data, stripAccents = false) {
+    const heArr = data.he || data.text;
+    const sections = data.sections || [];
+    const toSections = data.toSections || [];
+    const strip = s => (stripAccents ? stripTaamim(s) : s) || '';
+
+    // No range info — return everything
+    if (sections.length < 2 || toSections.length < 2) return flattenText(heArr, stripAccents);
+
+    const startV = sections[sections.length - 1];     // 1-based start verse
+    const endV   = toSections[toSections.length - 1]; // 1-based end verse
+    const sameCh = sections[0] === toSections[0];
+
+    if (sameCh) {
+        // Single chapter: heArr is a flat array of all chapter's verses
+        const arr = (Array.isArray(heArr) && Array.isArray(heArr[0])) ? heArr[0] : heArr;
+        return arr.slice(startV - 1, endV).map(strip);
+    } else {
+        // Multi-chapter: heArr is [[ch1 verses], [ch2 verses], ...]
+        const result = [];
+        const numCh = toSections[0] - sections[0] + 1;
+        for (let i = 0; i < numCh; i++) {
+            const chArr = Array.isArray(heArr[i]) ? heArr[i] : [];
+            const slice = i === 0           ? chArr.slice(startV - 1)  // from startV
+                        : i === numCh - 1   ? chArr.slice(0, endV)     // up to endV
+                        :                     chArr;                    // full middle chapter
+            slice.forEach(v => { if (v && v.trim()) result.push(strip(v)); });
+        }
+        return result;
+    }
+}
+
+function flattenText(arr, stripAccents = false) {
+    if (!arr) return [];
+    if (typeof arr === 'string') return [stripAccents ? stripTaamim(arr) : arr];
+    if (Array.isArray(arr)) {
+        const flat = [];
+        arr.forEach(item => {
+            if (typeof item === 'string') flat.push(stripAccents ? stripTaamim(item) : item);
+            else if (Array.isArray(item)) flat.push(...flattenText(item, stripAccents));
+        });
+        return flat;
+    }
+    return [];
+}
+
+function showSpinner(elId) {
+    document.getElementById(elId).innerHTML = '<div class="spinner"><div class="spinner-ring"></div><span>טוען...</span></div>';
+}
+
+function showError(elId, msg) {
+    document.getElementById(elId).innerHTML = '<div class="error-msg">' + msg + '</div>';
+}
+
+function flashDone(btnId) {
+    const btn = document.getElementById(btnId);
+    const orig = btn.textContent;
+    btn.textContent = '✓ נשמר!';
+    btn.classList.add('completed');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('completed'); }, 1500);
+}
+
+// ── Init learning view ──
+let learningInitDone = false;
+function clearOldParashaCache() {
+    // Remove any sessionStorage entries that might have full-chapter data cached
+    // without the sections/toSections metadata needed for correct slicing.
+    const toRemove = [];
+    for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && key.startsWith('parasha_')) {
+            try {
+                const d = JSON.parse(sessionStorage.getItem(key));
+                if (!d || !d.sections || !d.toSections) toRemove.push(key);
+            } catch(e) { toRemove.push(key); }
+        }
+    }
+    toRemove.forEach(k => sessionStorage.removeItem(k));
+}
+
+function initLearning() {
+    if (learningInitDone) { updateParashaUI(); updateMishnaUI(); updateTanakhUI(); return; }
+    learningInitDone = true;
+    clearOldParashaCache();
+    prog = loadProgress();
+    initParashaAutoDetect();
+    updateParashaUI();
+    updateMishnaUI();
+    updateTanakhUI();
+}
+
+// ── Parallax Hero ──
+function initParallax() {
+    const hero = document.getElementById('hero');
+    const deep = document.getElementById('paraDeep');
+    const near = document.getElementById('paraNear');
+    const content = document.getElementById('heroContent');
+    const hint = document.getElementById('scrollHint');
+
+    // Seed parallax star layers
+    function seedLayer(el, count, maxSize, maxOpacity) {
+        for (let i = 0; i < count; i++) {
+            const s = document.createElement('div');
+            const sz = Math.random() * maxSize + 0.8;
+            s.style.cssText = `position:absolute;background:white;border-radius:50%;width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${(Math.random()*maxOpacity).toFixed(2)}`;
+            el.appendChild(s);
+        }
+    }
+    seedLayer(deep, 90, 1.8, 0.55);  // slow, distant
+    seedLayer(near, 45, 3.5, 0.8);   // fast, close
+
+    // Gold dust particles in hero
+    for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        const sz = Math.random() * 4 + 2;
+        p.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;background:radial-gradient(circle,#f4c430,transparent);border-radius:50%;top:${Math.random()*100}%;left:${Math.random()*100}%;animation:float ${Math.random()*8+6}s ease-in-out infinite;animation-delay:${Math.random()*6}s;opacity:0;pointer-events:none;z-index:2`;
+        hero.appendChild(p);
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const y = window.scrollY;
+                const h = hero.offsetHeight;
+                if (y <= h) {
+                    const pct = y / h;
+                    deep.style.transform    = `translateY(${y * 0.18}px)`;
+                    near.style.transform    = `translateY(${y * 0.42}px)`;
+                    content.style.transform = `translateY(${y * 0.58}px)`;
+                    content.style.opacity   = Math.max(0, 1 - pct * 2);
+                    hint.style.opacity      = Math.max(0, 1 - pct * 4);
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+}
+initParallax();
+
+// ── Learning page hero parallax ──
+function initLearnHero() {
+    const hero = document.getElementById('learnHero');
+    const deep = document.getElementById('lhDeep');
+    const near = document.getElementById('lhNear');
+    const content = document.getElementById('lhContent');
+    if (!hero) return;
+
+    function seedLayer(el, count, maxSize, maxOpacity) {
+        for (let i = 0; i < count; i++) {
+            const s = document.createElement('div');
+            const sz = Math.random() * maxSize + 0.8;
+            s.style.cssText = `position:absolute;background:white;border-radius:50%;width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${(Math.random()*maxOpacity).toFixed(2)}`;
+            el.appendChild(s);
+        }
+    }
+    seedLayer(deep, 70, 1.8, 0.5);
+    seedLayer(near, 35, 3, 0.75);
+
+    // Gold dust
+    for (let i = 0; i < 8; i++) {
+        const p = document.createElement('div');
+        const sz = Math.random() * 4 + 2;
+        p.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;background:radial-gradient(circle,#f4c430,transparent);border-radius:50%;top:${Math.random()*100}%;left:${Math.random()*100}%;animation:float ${Math.random()*8+6}s ease-in-out infinite;animation-delay:${Math.random()*6}s;opacity:0;pointer-events:none;z-index:2`;
+        hero.appendChild(p);
+    }
+
+    // Parallax on scroll within learning view
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (document.getElementById('learningView').style.display === 'none') return;
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const heroTop = hero.getBoundingClientRect().top + window.scrollY;
+                const y = window.scrollY - heroTop;
+                const h = hero.offsetHeight;
+                if (y >= -h && y <= h) {
+                    deep.style.transform    = `translateY(${y * 0.18}px)`;
+                    near.style.transform    = `translateY(${y * 0.42}px)`;
+                    content.style.transform = `translateY(${y * 0.55}px)`;
+                    content.style.opacity   = Math.max(0, 1 - (y / h) * 2);
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+}
+initLearnHero();
+
+// ── Aramaic Word of the Day ──
+const ARAMAIC_WORDS = [
+  { w:'הָכָא', t:'hakhá', m:'כאן', e:'<em>הָכָא</em> מַאי עָבֵיד? — מה הוא עושה כאן?' },
+  { w:'הָתָם', t:'hatám', m:'שם', e:'<em>הָתָם</em> בַּדָּרוֹם שָׁאנֵי — שם בדרום שונה הדין.' },
+  { w:'מַאי', t:'mai', m:'מה', e:'<em>מַאי</em> טַעְמָא? — מה הטעם / מה הסיבה?' },
+  { w:'פְּשִׁיטָא', t:'peshitá', m:'פשוט, ברור', e:'<em>פְּשִׁיטָא</em>! — ברור! מה החידוש?' },
+  { w:'תֵּיקוּ', t:'teikú', m:'נשאר בספק', e:'<em>תֵּיקוּ</em> — השאלה נותרת ללא הכרעה.' },
+  { w:'אִיבַּעְיָא', t:'ivaiyá', m:'נשאלה שאלה', e:'<em>אִיבַּעְיָא</em> לְהוּ — שאלה עלתה ביניהם.' },
+  { w:'תָּא שְׁמַע', t:'tá shma', m:'בוא ושמע (ראיה)', e:'<em>תָּא שְׁמַע</em>: שנינו במשנה... — הנה ראיה.' },
+  { w:'אַלְמָא', t:'almá', m:'מכאן ש / אם כן', e:'<em>אַלְמָא</em> קסבר... — מכאן שהוא סבור כי...' },
+  { w:'מֵיתִיב', t:'meitív', m:'מקשה, מביא קושיה', e:'<em>מֵיתִיב</em> רבי יוחנן — הקשה רבי יוחנן.' },
+  { w:'תִּיּוּבְתָּא', t:'tiyuvtá', m:'קושיה חזקה, סתירה', e:'<em>תִּיּוּבְתָּא</em> דְּרב — קושיה על שיטת רב.' },
+  { w:'שָׁאנֵי', t:'shání', m:'שונה, יוצא דופן', e:'הָתָם <em>שָׁאנֵי</em> — שם המקרה שונה.' },
+  { w:'קַמַּשְׁמַע לַן', t:"qá mashma lan", m:'בא ללמדנו', e:'<em>קַמַּשְׁמַע לַן</em> — לכן יש צורך בפסוק זה.' },
+  { w:'כְּגוֹן', t:'kegón', m:'כמו, למשל', e:'<em>כְּגוֹן</em> דְּאָמַר... — למשל אם אמר...' },
+  { w:'דְּהַיְינוּ', t:'dehayní', m:'כלומר, שזהו', e:'<em>דְּהַיְינוּ</em> הָא דְּאָמַר רב — כלומר זהו מה שאמר רב.' },
+  { w:'הַיְינוּ', t:'hayní', m:'הוא הדין, זהו', e:'<em>הַיְינוּ</em> דְּקַתָּנֵי — זוהי כוונת המשנה.' },
+  { w:'אֲפִילוּ הָכִי', t:'afilu hakhí', m:'אפילו כך', e:'<em>אֲפִילוּ הָכִי</em> אָסוּר — אפילו כך אסור.' },
+  { w:'אַדְּרַבָּה', t:'adrábba', m:'אדרבא, להיפך', e:'<em>אַדְּרַבָּה</em> — להיפך! מזה ראיה לצד השני.' },
+  { w:'אַכַּתִּי', t:'akhátei', m:'עדיין', e:'<em>אַכַּתִּי</em> קַשְׁיָא — עדיין קשה, עדיין לא תירצת.' },
+  { w:'לָא שָׁנָא', t:'lá shaná', m:'לא שנא, אין הבדל', e:'<em>לָא שָׁנָא</em> הָא וְלָא שָׁנָא הָא — אין הבדל בין זה לזה.' },
+  { w:'אֵי הָכִי', t:'ei hakhí', m:'אם כך', e:'<em>אֵי הָכִי</em> — אם אכן כך הוא, מדוע...?' },
+  { w:'בְּעֵי', t:'baei', m:'שואל, מבקש', e:'<em>בְּעֵי</em> רב אשי — שאל רב אשי.' },
+  { w:'לֵימָא', t:'leimá', m:'נאמר? האם נאמר?', e:'<em>לֵימָא</em> תֶּהֱוֵי תְּיוּבְתָּא — האם נאמר שזו קושיה?' },
+  { w:'אִי נָמֵי', t:'ei namí', m:'או גם, לחלופין', e:'<em>אִי נָמֵי</em> אֵימָא — או שאפשר לומר אחרת.' },
+  { w:'פְּלוּגְתָּא', t:'plugtá', m:'מחלוקת', e:'<em>פְּלוּגְתָּא</em> דְּרב וּשְׁמוּאֵל — מחלוקת בין רב לשמואל.' },
+  { w:'אֲלִיבָּא דְּ', t:'alíba de', m:'לפי שיטת, לדעת', e:'<em>אֲלִיבָּא דְּ</em>רבי עקיבא — לפי שיטת רבי עקיבא.' },
+  { w:'הֵיכִי', t:'hekhi', m:'איך, כיצד', e:'<em>הֵיכִי</em> דָמֵי? — כיצד בדיוק עובד זה?' },
+  { w:'כִּי הַאי גַּוְנָא', t:'ki hai gavná', m:'כעין זה, כגון זה', e:'<em>כִּי הַאי גַּוְנָא</em> מַאי? — ובמקרה כזה מה הדין?' },
+  { w:'וְכִי תֵּימָא', t:'vekhí teimá', m:'ואם תאמר', e:'<em>וְכִי תֵּימָא</em> דְּשָׁאנֵי — ואם תאמר ששם שונה...' },
+  { w:'קַשְׁיָא', t:'qashiyá', m:'קשה, קושיה', e:'<em>קַשְׁיָא</em> הַאי אַהַאי — קשה סתירה בין אלו.' },
+  { w:'נִיחָא', t:'nikhá', m:'ניחא, מובן, מסתדר', e:'<em>נִיחָא</em> לְמַאן דְּאָמַר... — לפי מי שאומר... מסתדר.' },
+  { w:'מִנַּיִן', t:'minayín', m:'מניין, מאיפה', e:'<em>מִנַּיִן</em>? תַּלְמוּד לוֹמַר... — מאיפה לומדים? הפסוק אומר...' },
+  { w:'אֵיכָּא', t:'ekhá', m:'יש, קיים', e:'<em>אֵיכָּא</em> לְמֵימַר — יש מקום לומר.' },
+  { w:'לֵיכָּא', t:'lekhá', m:'אין, לא קיים', e:'<em>לֵיכָּא</em> מִידֵּי — אין כאן שום דבר.' },
+  { w:'מִינַּהּ', t:'minnáh', m:'ממנה, מכאן', e:'שְׁמַע <em>מִינַּהּ</em> — למד מכאן.' },
+  { w:'שְׁמַע מִינַּהּ', t:'shma minnáh', m:'למד מכאן', e:'<em>שְׁמַע מִינַּהּ</em> תְּלָת — למד מכאן שלוש הלכות.' },
+  { w:'אֵימַת', t:'eimat', m:'מתי', e:'<em>אֵימַת</em>? — מתי בדיוק חל הדין הזה?' },
+  { w:'חֲדָא', t:'khadá', m:'אחת', e:'<em>חֲדָא</em> מִינַּיְיהוּ — אחת מהן.' },
+  { w:'תַּרְתֵּי', t:'tartéi', m:'שתיים', e:'<em>תַּרְתֵּי</em> לְמָה לִי? — למה צריך שתיים?' },
+  { w:'יוֹמָא', t:'yomá', m:'יום', e:'<em>יוֹמָא</em> חַד — יום אחד.' },
+  { w:'לֵילְיָא', t:'leiliyá', m:'לילה', e:'כׇּל <em>לֵילְיָא</em> — כל הלילה.' },
+  { w:'שַׁתָּא', t:'shatá', m:'שנה', e:'כׇּל <em>שַׁתָּא</em> — כל שנה.' },
+  { w:'רַבָּה', t:'rabá', m:'הרבה, גדול', e:'מִלְּתָא <em>רַבָּה</em> — דבר גדול.' },
+  { w:'זוּטָא', t:'zutá', m:'קטן', e:'<em>זוּטָא</em> הוּא — הוא קטן.' },
+  { w:'בְּהָדֵי', t:'bhadéi', m:'ביחד עם, אצל', e:'<em>בְּהָדֵי</em> הֲדָדֵי — ביחד, זה עם זה.' },
+  { w:'הֲדָדֵי', t:'hadadéi', m:'זה את זה, הדדי', e:'מְסַיְּיעִי <em>הֲדָדֵי</em> — עוזרים זה לזה.' },
+  { w:'כַּוְותֵיהּ', t:'kavvatéih', m:'כמותו, לפיו', e:'הִלְכְּתָא <em>כַּוְותֵיהּ</em> — ההלכה כמותו.' },
+  { w:'דְּאָמַר', t:'de-amár', m:'שאמר, שאומר', e:'מַאן <em>דְּאָמַר</em>... — מי שאומר...' },
+  { w:'קָאָמַר', t:'qa-amár', m:'אומר (בהווה)', e:'מַאי <em>קָאָמַר</em>? — מה הוא אומר / מה כוונתו?' },
+  { w:'אֲמַר לֵיהּ', t:'amar léih', m:'אמר לו', e:'<em>אֲמַר לֵיהּ</em> אַבָּיֵי לְרָבָא — אמר לו אביי לרבא.' },
+  { w:'מַתְנִי׳', t:'matni', m:'שנינו במשנה', e:'<em>מַתְנִי׳</em>: הָאִשָּׁה שֶׁנָּתְנָה... — המשנה אומרת...' },
+  { w:'גְּמָרָא', t:'gemará', m:'גמרא, לימוד', e:'<em>גְּמָרָא</em> גְּמוֹר — למד היטב.' },
+  { w:'תָּנָא', t:'taná', m:'תנא, שנה, לימד', e:'<em>תָּנָא</em> — שנה התנא ברייתא.' },
+  { w:'אִתְּמַר', t:'itmar', m:'נאמר (אמוראים)', e:'<em>אִתְּמַר</em>: אָמַר רַב... — נאמר בשם רב...' },
+  { w:'הוּא הַדִּין', t:'hu hadin', m:'הוא הדין, אותו דין', e:'<em>הוּא הַדִּין</em> לְ... — אותו הדין חל גם ל...' },
+  { w:'לֹא מִיבַּעְיָא', t:'lo mivaiyá', m:'לא רק... אלא אף', e:'<em>לֹא מִיבַּעְיָא</em> הָא, אֶלָּא אֲפִילוּ הָא — לא רק זה, אף זה.' },
+  { w:'כׇּל שֶׁכֵּן', t:'kol shekén', m:'קל וחומר, בוודאי', e:'<em>כׇּל שֶׁכֵּן</em> — קל וחומר שכן.' },
+  { w:'בְּדִיעֲבַד', t:'bedi-avád', m:'בדיעבד, לאחר מעשה', e:'<em>בְּדִיעֲבַד</em> כָּשֵׁר — לאחר שנעשה — כשר.' },
+  { w:'לְכַתְּחִלָּה', t:'lekhatekhilá', m:'לכתחילה, מלכתחילה', e:'<em>לְכַתְּחִלָּה</em> אֵינוֹ עוֹשֶׂה כֵּן — אין לעשות כן מלכתחילה.' },
+  { w:'אַלִּיבָּא', t:'allibá', m:'לפי, לדעת', e:'<em>אַלִּיבָּא</em> דְּכוּלֵּי עָלְמָא — לפי דעת כולם.' },
+  { w:'כוּלֵּי עָלְמָא', t:'kulei álma', m:'כולם, הכל', e:'<em>כוּלֵּי עָלְמָא</em> לָא פְּלִיגֵי — בזה אין מחלוקת.' },
+  { w:'אִיכָּא בֵּינַיְיהוּ', t:'ika beinaiyhu', m:'יש ביניהם הבדל', e:'<em>אִיכָּא בֵּינַיְיהוּ</em> — ההבדל המעשי ביניהם הוא...' },
+  { w:'בָּעֵי רַחֲמֵי', t:'baei rakhamei', m:'מבקש רחמים, מתפלל', e:'<em>בָּעֵי רַחֲמֵי</em> עַל נַפְשֵׁיהּ — התפלל על עצמו.' },
+  { w:'שַׁפִּיר', t:'shapír', m:'יפה, בסדר, נכון', e:'<em>שַׁפִּיר</em> קָאָמַר — נכון הוא אומר.' },
+  { w:'לֵישׁ לֵיהּ', t:'leish léih', m:'אין לו, חסר לו', e:'<em>לֵישׁ לֵיהּ</em> — אין לו את הדין הזה.' },
+  { w:'אִית לֵיהּ', t:'it léih', m:'יש לו', e:'<em>אִית לֵיהּ</em> לְהַאי תַּנָּא — לתנא זה יש שיטה כזו.' },
+  { w:'מִדְּרַבָּנַן', t:'midi-rabbanan', m:'מדרבנן, מדברי חכמים', e:'<em>מִדְּרַבָּנַן</em> הוּא — זה מדברי חכמים בלבד.' },
+  { w:'מִדְּאוֹרַיְיתָא', t:'midi-oraita', m:'מהתורה, מדאורייתא', e:'<em>מִדְּאוֹרַיְיתָא</em> שָׁרֵי — מן התורה מותר.' },
+  { w:'אִיסוּר', t:'isúr', m:'איסור', e:'<em>אִיסוּר</em> דְּאוֹרַיְיתָא — איסור מן התורה.' },
+  { w:'פְּטוּר', t:'patúr', m:'פטור', e:'<em>פְּטוּר</em> אֲבָל אָסוּר — פטור אבל אסור.' },
+  { w:'חַיָּיב', t:'khaiyáv', m:'חייב', e:'<em>חַיָּיב</em> לְשַׁלֵּם — חייב לשלם.' },
+  { w:'מוּדֶה', t:'modé', m:'מודה, מסכים', e:'<em>מוּדֶה</em> בּוֹ רַבִּי — רבי מסכים בזה.' },
+  { w:'פְּלִיגֵי', t:'peligéi', m:'חולקים, נחלקים', e:'בְּהַאי <em>פְּלִיגֵי</em> — בזה הם חולקים.' },
+  { w:'הַהוּא', t:'hahu', m:'אותו, הוא', e:'<em>הַהוּא</em> גַּבְרָא — אותו אדם.' },
+  { w:'הַהִיא', t:'hahi', m:'אותה, היא', e:'<em>הַהִיא</em> אִיתְּתָא — אותה אישה.' },
+  { w:'מַשְׁכַּחַת לַהּ', t:'mashkakhat lah', m:'מוצא אותה, מתקיים', e:'הֵיכִי <em>מַשְׁכַּחַת לַהּ</em>? — כיצד מתקיים מקרה כזה?' },
+  { w:'בָּבָא', t:'babá', m:'שער, פרק, חלק', e:'<em>בָּבָא</em> קַמָּא — השער הראשון (שם מסכת).' },
+  { w:'סֻגְיָא', t:'sugiyá', m:'סוגיה, קטע בגמרא', e:'<em>סֻגְיָא</em> דְּשַׁמְעַתָּא — הסוגיה של הלכה זו.' },
+  { w:'שַׁמְעַתָּא', t:'shama-atá', m:'שמועה, הלכה, סוגיה', e:'הַאי <em>שַׁמְעַתָּא</em> קַשְׁיָא — הלכה זו קשה.' },
+];
+
+function renderAramaicWord() {
+    // Change word daily based on date (Israel time)
+    const nowUTC = new Date();
+    const nowIL = new Date(nowUTC.getTime() + 3 * 3600 * 1000);
+    const dayOfYear = Math.floor((nowIL - new Date(Date.UTC(nowIL.getUTCFullYear(), 0, 1))) / 86400000);
+    const idx = dayOfYear % ARAMAIC_WORDS.length;
+    const w = ARAMAIC_WORDS[idx];
+
+    document.getElementById('aramaicWord').textContent = w.w;
+    document.getElementById('aramaicTranslit').textContent = w.t;
+    document.getElementById('aramaicMeaning').textContent = w.m;
+    document.getElementById('aramaicExample').innerHTML = w.e;
+    document.getElementById('aramaicDayCount').textContent =
+        `מילה ${idx + 1} מתוך ${ARAMAIC_WORDS.length}`;
+}
+renderAramaicWord();
+
+// ── Font Size Control ──
+let currentFontSize = parseInt(localStorage.getItem('fontSize') || '18');
+function applyFontSize(size) {
+    currentFontSize = Math.min(28, Math.max(14, size));
+    // Use CSS variable so dynamically created .text-content elements inherit it automatically
+    document.documentElement.style.setProperty('--text-content-size', currentFontSize + 'px');
+    localStorage.setItem('fontSize', currentFontSize);
+}
+function changeFontSize(delta) { applyFontSize(currentFontSize + delta * 2); }
+applyFontSize(currentFontSize);
+
+// ── Light / Dark Mode ──
+function applyTheme(mode) {
+    if (mode === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('themeIcon').textContent = '🌙';
+    } else {
+        document.body.classList.remove('light');
+        document.getElementById('themeIcon').textContent = '☀️';
+    }
+}
+function toggleTheme() {
+    const isLight = document.body.classList.contains('light');
+    const next = isLight ? 'dark' : 'light';
+    localStorage.setItem('colorScheme', next);
+    applyTheme(next);
+}
+// Apply saved preference on load
+applyTheme(localStorage.getItem('colorScheme') || 'dark');
+
+// ═══════════════════════════════════════════
+// Google Cloud TTS v3 — Robust, no double-play, natural pauses, יהוה fix
+// ═══════════════════════════════════════════
+const TTS_API_KEY = 'AIzaSyAC9hS-3raORdI6Qt-XayXRdx3kvoqe8ew';
+const TTS_VOICE = 'he-IL-Wavenet-D';
+const TTS_WORDS_PER_CHUNK = 100;
+
+let ttsAudio = null;
+let ttsCurrentBtnId = null;
+let ttsContentElId = null;
+let ttsHighlightTimer = null;
+let ttsSessionId = 0; // increments each session — prevents race conditions & double-play
+
+// ── Word preprocessing ──
+function preprocessWord(w) {
+    const letters = w.replace(/[^\u05D0-\u05EA]/g, '');
+    if (letters === 'יהוה') return 'אדוניי';
+    return w;
+}
+
+// ── Build SSML with marks + natural pauses ──
+function buildSSML(words) {
+    let s = '<speak>';
+    words.forEach((w, i) => {
+        s += `<mark name="${i}"/>` + w;
+        if (/[.!?׃]/.test(w))      s += '<break time="550ms"/>';
+        else if (/[,;׀–]/.test(w)) s += '<break time="250ms"/>';
+        if (i < words.length - 1)  s += ' ';
+    });
+    return s + '</speak>';
+}
+
+// ── Wrap words in spans (skip verse numbers) ──
+function wrapWordsForTTS(elId) {
+    const container = document.getElementById(elId);
+    if (!container || container.dataset.ttsWrapped === '1') return;
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+        if (node.parentElement.closest('.verse-num')) continue;
+        if (node.textContent.trim()) textNodes.push(node);
+    }
+    let idx = 0;
+    for (const tn of textNodes) {
+        const frag = document.createDocumentFragment();
+        for (const part of tn.textContent.split(/(\s+)/)) {
+            if (/^\s*$/.test(part)) {
+                frag.appendChild(document.createTextNode(part || ' '));
+            } else {
+                const sp = document.createElement('span');
+                sp.className = 'tts-word';
+                sp.dataset.idx = idx++;
+                sp.textContent = part;
+                frag.appendChild(sp);
+            }
+        }
+        tn.parentNode.replaceChild(frag, tn);
+    }
+    container.dataset.ttsWrapped = '1';
+    container.addEventListener('click', function(e) {
+        const sp = e.target.closest('.tts-word');
+        if (sp) startFromWordIdx(elId, parseInt(sp.dataset.idx));
+    });
+}
+
+// Auto-wrap when Sefaria loads text
+['parashaTextContent','mishnaTextContent','tanakhTextContent'].forEach(elId => {
+    const obs = new MutationObserver(() => {
+        const el = document.getElementById(elId);
+        if (!el || el.dataset.ttsWrapped === '1') return;
+        if (el.querySelector('.spinner') || el.querySelector('.error-msg')) return;
+        if ((el.innerText || '').trim().length > 10) setTimeout(() => wrapWordsForTTS(elId), 80);
+    });
+    const el = document.getElementById(elId);
+    if (el) obs.observe(el, { childList: true });
+});
+
+function chunkWordArray(words, size) {
+    const chunks = [];
+    for (let i = 0; i < words.length; i += size) chunks.push(words.slice(i, i + size));
+    return chunks;
+}
+
+async function fetchChunk(words) {
+    const ssml = buildSSML(words.map(preprocessWord));
+    const res = await fetch(
+        `https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=${TTS_API_KEY}`,
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                input: { ssml },
+                voice: { languageCode: 'he-IL', name: TTS_VOICE },
+                audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9, pitch: -1.0 },
+                enableTimePointing: ['SSML_MARK']
+            })
+        }
+    );
+    const data = await res.json();
+    if (!data.audioContent) throw new Error(data.error?.message || 'אין תוצאה מה-API');
+    return { audioUrl: 'data:audio/mp3;base64,' + data.audioContent, timepoints: data.timepoints || [] };
+}
+
+function startHighlighting(audio, timepoints, globalOffset) {
+    clearInterval(ttsHighlightTimer);
+    const markers = timepoints
+        .map(tp => ({ t: tp.timeSeconds, idx: parseInt(tp.markName) + globalOffset }))
+        .sort((a, b) => a.t - b.t);
+    const container = document.getElementById(ttsContentElId);
+    if (!container) return;
+    ttsHighlightTimer = setInterval(() => {
+        if (!audio || audio.paused) return;
+        const now = audio.currentTime;
+        let cur = -1;
+        for (let i = markers.length - 1; i >= 0; i--) {
+            if (markers[i].t <= now) { cur = markers[i].idx; break; }
+        }
+        if (cur < 0) return;
+        container.querySelectorAll('.tts-word.tts-active').forEach(s => s.classList.remove('tts-active'));
+        const sp = container.querySelector(`.tts-word[data-idx="${cur}"]`);
+        if (sp) { sp.classList.add('tts-active'); sp.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    }, 50);
+}
+
+async function startFromWordIdx(elId, wordIdx) {
+    const myId = ++ttsSessionId; // any older session will bail out on next check
+
+    // Stop current playback immediately
+    clearInterval(ttsHighlightTimer);
+    if (ttsAudio) { try { ttsAudio.pause(); } catch(e){} ttsAudio = null; }
+    document.querySelectorAll('.tts-word.tts-active').forEach(s => s.classList.remove('tts-active'));
+
+    wrapWordsForTTS(elId);
+    const container = document.getElementById(elId);
+    const allSpans = Array.from(container.querySelectorAll('.tts-word'));
+    if (allSpans.length === 0) {
+        console.warn('TTS: no text content found in', elId); return;
+        return;
+    }
+
+    ttsContentElId = elId;
+    ttsCurrentBtnId = elId.replace('TextContent', 'TtsBtn');
+
+    const track  = ttsCurrentBtnId.replace('TtsBtn', '');
+    const btn    = document.getElementById(ttsCurrentBtnId);
+    const stopEl = document.getElementById(track + 'TtsStop');
+    const prog   = document.getElementById(track + 'TtsProgress');
+
+    const words  = allSpans.slice(wordIdx).map(s => s.textContent);
+    const chunks = chunkWordArray(words, TTS_WORDS_PER_CHUNK);
+    let chunkOffset = 0;
+
+    for (let idx = 0; idx < chunks.length; idx++) {
+        if (myId !== ttsSessionId) return;
+
+        if (btn) { btn.innerHTML = '⏳ טוען...'; btn.disabled = true; }
+        if (prog && chunks.length > 1) prog.textContent = `${idx + 1}/${chunks.length}`;
+
+        try {
+            const { audioUrl, timepoints } = await fetchChunk(chunks[idx]);
+            if (myId !== ttsSessionId) return;
+
+            const audio = new Audio(audioUrl);
+            ttsAudio = audio;
+
+            await new Promise((resolve, reject) => {
+                let done = false;
+                const finish = () => { if (!done) { done = true; resolve(); } };
+                audio.addEventListener('ended', finish, { once: true });
+                audio.addEventListener('error', () => { if (!done) { done = true; reject(new Error('שגיאת השמעה')); } }, { once: true });
+                // iOS fallback: 'ended' sometimes doesn't fire on data: URLs
+                audio.addEventListener('timeupdate', function iosCheck() {
+                    if (audio.duration > 0 && audio.currentTime >= audio.duration - 0.15) {
+                        audio.removeEventListener('timeupdate', iosCheck);
+                        setTimeout(finish, 250);
+                    }
+                });
+                audio.play().then(() => {
+                    if (myId !== ttsSessionId) { audio.pause(); resolve(); return; }
+                    if (btn)    { btn.innerHTML = '⏸ השהה'; btn.disabled = false; }
+                    if (stopEl)   stopEl.style.display = '';
+                    startHighlighting(audio, timepoints, wordIdx + chunkOffset);
+                }).catch(reject);
+            });
+
+            if (myId !== ttsSessionId) return;
+            clearInterval(ttsHighlightTimer);
+            chunkOffset += chunks[idx].length;
+
+        } catch(e) {
+            if (myId !== ttsSessionId) return;
+            console.error('TTS שגיאה:', e);
+            if (prog) prog.textContent = '❌ ' + (e.message || 'שגיאה');
+            break;
+        }
+    }
+
+    if (myId === ttsSessionId) resetTTSUI();
+}
+
+async function speakText(contentElId, btnEl) {
+    if (ttsCurrentBtnId === btnEl.id && ttsAudio && !ttsAudio.paused) {
+        ttsAudio.pause(); clearInterval(ttsHighlightTimer); btnEl.innerHTML = '▶ המשך'; return;
+    }
+    if (ttsCurrentBtnId === btnEl.id && ttsAudio && ttsAudio.paused) {
+        ttsAudio.play().then(() => btnEl.innerHTML = '⏸ השהה'); return;
+    }
+
+    // Auto-open text panel if not yet loaded
+    const container = document.getElementById(contentElId);
+    const isEmpty = !container || container.querySelectorAll('.tts-word, .verse, p').length === 0;
+    if (isEmpty) {
+        btnEl.innerHTML = '⏳ טוען...';
+        btnEl.disabled = true;
+        // Open the correct panel
+        if (contentElId === 'parashaTextContent') {
+            if (!parashaOpen) toggleParashaText();
+            await fetchParashaText();
+        } else if (contentElId === 'mishnaTextContent') {
+            if (!mishnaOpen) toggleMishnaText();
+            await fetchMishnaText();
+        } else if (contentElId === 'tanakhTextContent') {
+            if (!tanakhOpen) toggleTanakhText();
+            await fetchTanakhText();
+        }
+        // Small delay to let DOM render
+        await new Promise(r => setTimeout(r, 150));
+        btnEl.disabled = false;
+    }
+
+    await startFromWordIdx(contentElId, 0);
+}
+
+function stopTTS(reset = true) {
+    ttsSessionId++;
+    clearInterval(ttsHighlightTimer);
+    if (ttsAudio) { try { ttsAudio.pause(); } catch(e){} ttsAudio = null; }
+    document.querySelectorAll('.tts-word.tts-active').forEach(s => s.classList.remove('tts-active'));
+    if (reset) resetTTSUI();
+}
+
+function resetTTSUI() {
+    clearInterval(ttsHighlightTimer);
+    document.querySelectorAll('.tts-word.tts-active').forEach(s => s.classList.remove('tts-active'));
+    ['parasha', 'mishna', 'tanakh'].forEach(t => {
+        const btn  = document.getElementById(t + 'TtsBtn');
+        const stop = document.getElementById(t + 'TtsStop');
+        const prog = document.getElementById(t + 'TtsProgress');
+        if (btn)  { btn.innerHTML = '🔊 הקרא'; btn.disabled = false; }
+        if (stop)   stop.style.display = 'none';
+        if (prog)   prog.textContent = '';
+    });
+    ttsCurrentBtnId = null;
+    ttsContentElId  = null;
+}
+</script>
+</body>
+</html>
